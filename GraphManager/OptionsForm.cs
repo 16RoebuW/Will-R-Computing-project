@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace GraphManager
 {
-    public partial class mainForm : Form
+    public partial class OptionsForm : Form
     {
-        public mainForm()
+        public OptionsForm()
         {
             InitializeComponent();
         }
