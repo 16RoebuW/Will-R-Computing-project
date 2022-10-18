@@ -40,11 +40,11 @@
             this.rdbEdit = new System.Windows.Forms.RadioButton();
             this.rbdDelete = new System.Windows.Forms.RadioButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.icoCreate = new System.Windows.Forms.PictureBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.trbZoom = new System.Windows.Forms.TrackBar();
+            this.zoomPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.icoZoomOut = new System.Windows.Forms.PictureBox();
+            this.trbZoom = new System.Windows.Forms.TrackBar();
             this.icoZoomIn = new System.Windows.Forms.PictureBox();
             this.icoEdit = new System.Windows.Forms.PictureBox();
             this.icoDelete = new System.Windows.Forms.PictureBox();
@@ -52,9 +52,9 @@
             this.tstMiddle.SuspendLayout();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoCreate)).BeginInit();
-            this.flowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trbZoom)).BeginInit();
+            this.zoomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomOut)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trbZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomIn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).BeginInit();
@@ -176,7 +176,7 @@
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.statusLabel});
             this.statusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.statusStrip.Location = new System.Drawing.Point(0, 809);
             this.statusStrip.Name = "statusStrip";
@@ -184,11 +184,11 @@
             this.statusStrip.TabIndex = 6;
             this.statusStrip.Text = "Information and errors will show up here";
             // 
-            // toolStripStatusLabel1
+            // statusLabel
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(221, 15);
-            this.toolStripStatusLabel1.Text = "Information and errors will show up here";
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(221, 15);
+            this.statusLabel.Text = "Information and errors will show up here";
             // 
             // icoCreate
             // 
@@ -200,24 +200,17 @@
             this.icoCreate.TabIndex = 9;
             this.icoCreate.TabStop = false;
             // 
-            // flowLayoutPanel1
+            // zoomPanel
             // 
-            this.flowLayoutPanel1.Controls.Add(this.icoZoomOut);
-            this.flowLayoutPanel1.Controls.Add(this.trbZoom);
-            this.flowLayoutPanel1.Controls.Add(this.icoZoomIn);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 773);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1584, 36);
-            this.flowLayoutPanel1.TabIndex = 10;
-            // 
-            // trbZoom
-            // 
-            this.trbZoom.Location = new System.Drawing.Point(1431, 3);
-            this.trbZoom.Name = "trbZoom";
-            this.trbZoom.Size = new System.Drawing.Size(104, 45);
-            this.trbZoom.TabIndex = 8;
+            this.zoomPanel.Controls.Add(this.icoZoomOut);
+            this.zoomPanel.Controls.Add(this.trbZoom);
+            this.zoomPanel.Controls.Add(this.icoZoomIn);
+            this.zoomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.zoomPanel.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.zoomPanel.Location = new System.Drawing.Point(0, 773);
+            this.zoomPanel.Name = "zoomPanel";
+            this.zoomPanel.Size = new System.Drawing.Size(1584, 36);
+            this.zoomPanel.TabIndex = 10;
             // 
             // icoZoomOut
             // 
@@ -228,6 +221,13 @@
             this.icoZoomOut.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.icoZoomOut.TabIndex = 11;
             this.icoZoomOut.TabStop = false;
+            // 
+            // trbZoom
+            // 
+            this.trbZoom.Location = new System.Drawing.Point(1431, 3);
+            this.trbZoom.Name = "trbZoom";
+            this.trbZoom.Size = new System.Drawing.Size(104, 45);
+            this.trbZoom.TabIndex = 8;
             // 
             // icoZoomIn
             // 
@@ -266,7 +266,7 @@
             this.ClientSize = new System.Drawing.Size(1584, 829);
             this.Controls.Add(this.icoDelete);
             this.Controls.Add(this.icoEdit);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.zoomPanel);
             this.Controls.Add(this.icoCreate);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.rbdDelete);
@@ -285,10 +285,10 @@
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoCreate)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trbZoom)).EndInit();
+            this.zoomPanel.ResumeLayout(false);
+            this.zoomPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomOut)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trbZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomIn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).EndInit();
@@ -310,9 +310,9 @@
         private System.Windows.Forms.ToolStripComboBox cbxAlgorithmSelect;
         private System.Windows.Forms.ToolStripButton btnAlgRun;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.PictureBox icoCreate;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel zoomPanel;
         private System.Windows.Forms.PictureBox icoZoomOut;
         private System.Windows.Forms.TrackBar trbZoom;
         private System.Windows.Forms.PictureBox icoZoomIn;
