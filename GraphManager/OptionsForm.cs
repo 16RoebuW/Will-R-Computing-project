@@ -16,5 +16,10 @@ namespace GraphManager
         {
             InitializeComponent();
         }
+
+        private void closeOptions(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -91,6 +91,7 @@
             this.btnOptions.Name = "btnOptions";
             this.btnOptions.Size = new System.Drawing.Size(122, 34);
             this.btnOptions.Text = "Options";
+            this.btnOptions.Click += new System.EventHandler(this.openOptions);
             // 
             // tstMiddle
             // 
@@ -146,7 +147,7 @@
             this.rdbCreate.Location = new System.Drawing.Point(232, 0);
             this.rdbCreate.Name = "rdbCreate";
             this.rdbCreate.Size = new System.Drawing.Size(176, 34);
-            this.rdbCreate.TabIndex = 3;
+            this.rdbCreate.TabIndex = 2;
             this.rdbCreate.TabStop = true;
             this.rdbCreate.Text = "Create Mode";
             this.rdbCreate.UseVisualStyleBackColor = true;
@@ -158,7 +159,7 @@
             this.rdbEdit.Location = new System.Drawing.Point(232, 37);
             this.rdbEdit.Name = "rdbEdit";
             this.rdbEdit.Size = new System.Drawing.Size(145, 34);
-            this.rdbEdit.TabIndex = 4;
+            this.rdbEdit.TabIndex = 3;
             this.rdbEdit.Text = "Edit Mode";
             this.rdbEdit.UseVisualStyleBackColor = true;
             // 
@@ -169,7 +170,7 @@
             this.rbdDelete.Location = new System.Drawing.Point(232, 76);
             this.rbdDelete.Name = "rbdDelete";
             this.rbdDelete.Size = new System.Drawing.Size(174, 34);
-            this.rbdDelete.TabIndex = 5;
+            this.rbdDelete.TabIndex = 4;
             this.rbdDelete.Text = "Delete Mode";
             this.rbdDelete.UseVisualStyleBackColor = true;
             // 
