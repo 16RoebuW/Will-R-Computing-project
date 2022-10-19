@@ -19,8 +19,8 @@ namespace GraphManager
 
         private void openOptions(object sender, EventArgs e)
         {
-            OptionsForm optionsBox = new OptionsForm();
-            optionsBox.Show();
+            OptionsForm optionsForm = new OptionsForm();
+            optionsForm.Show();
             
         }
     }

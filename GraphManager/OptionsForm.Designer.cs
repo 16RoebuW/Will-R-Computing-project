@@ -47,10 +47,12 @@
             this.optionsBox.Name = "optionsBox";
             this.optionsBox.Size = new System.Drawing.Size(259, 228);
             this.optionsBox.TabIndex = 0;
+            this.optionsBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.itemChecked);
             // 
             // btnClose
             // 
             this.btnClose.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
             this.btnClose.Location = new System.Drawing.Point(139, 0);
             this.btnClose.Name = "btnClose";
@@ -83,7 +85,7 @@
             // 
             // darkThemeIndicator
             // 
-            this.darkThemeIndicator.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.darkThemeIndicator.BackColor = System.Drawing.SystemColors.ControlText;
             this.darkThemeIndicator.Location = new System.Drawing.Point(3, 45);
             this.darkThemeIndicator.Name = "darkThemeIndicator";
             this.darkThemeIndicator.Size = new System.Drawing.Size(32, 32);
@@ -98,6 +100,7 @@
             this.Controls.Add(this.lblLargeText);
             this.Controls.Add(this.closePanel);
             this.Controls.Add(this.optionsBox);
+            this.MaximumSize = new System.Drawing.Size(328, 379);
             this.Name = "OptionsForm";
             this.Text = "OptionsForm";
             this.closePanel.ResumeLayout(false);

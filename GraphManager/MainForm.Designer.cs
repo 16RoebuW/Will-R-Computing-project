@@ -118,7 +118,9 @@
             // 
             // cbxAlgorithmSelect
             // 
+            this.cbxAlgorithmSelect.BackColor = System.Drawing.SystemColors.Window;
             this.cbxAlgorithmSelect.DropDownWidth = 800;
+            this.cbxAlgorithmSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cbxAlgorithmSelect.Items.AddRange(new object[] {
             "Shortest path (Accurate)",
             "Shortest path (Fast)",
