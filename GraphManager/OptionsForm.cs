@@ -24,7 +24,7 @@ namespace GraphManager
 
         private void itemChecked(object sender, ItemCheckEventArgs e)
         {
-            // Called before the item is actually checked/unchecked
+            //Called before the item is actually checked/unchecked
             switch (optionsBox.SelectedIndex)
             {
                 case 1:
