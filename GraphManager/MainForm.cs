@@ -17,11 +17,17 @@ namespace GraphManager
             InitializeComponent();
         }
 
-        private void openOptions(object sender, EventArgs e)
+        private void ProgramLoaded(object sender, EventArgs e)
         {
             OptionsForm optionsForm = new OptionsForm();
             optionsForm.Show();
-            
+            optionsForm.Close();
+        }
+
+        private void OpenOptions(object sender, EventArgs e)
+        {
+            OptionsForm optionsForm = new OptionsForm();
+            optionsForm.Show();
         }
     }
 }

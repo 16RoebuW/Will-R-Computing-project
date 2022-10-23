@@ -91,7 +91,7 @@
             this.btnOptions.Name = "btnOptions";
             this.btnOptions.Size = new System.Drawing.Size(122, 34);
             this.btnOptions.Text = "Options";
-            this.btnOptions.Click += new System.EventHandler(this.openOptions);
+            this.btnOptions.Click += new System.EventHandler(this.OpenOptions);
             // 
             // tstMiddle
             // 
@@ -103,7 +103,7 @@
             this.tstMiddle.Location = new System.Drawing.Point(0, 37);
             this.tstMiddle.Name = "tstMiddle";
             this.tstMiddle.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.tstMiddle.Size = new System.Drawing.Size(1584, 37);
+            this.tstMiddle.Size = new System.Drawing.Size(1584, 42);
             this.tstMiddle.TabIndex = 1;
             this.tstMiddle.Text = "toolStrip2";
             // 
@@ -113,7 +113,7 @@
             this.btnLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnLoad.Image")));
             this.btnLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(169, 34);
+            this.btnLoad.Size = new System.Drawing.Size(169, 39);
             this.btnLoad.Text = "Open Graph";
             // 
             // cbxAlgorithmSelect
@@ -129,15 +129,16 @@
             "Find minimum network containing all nodes (MST)"});
             this.cbxAlgorithmSelect.Margin = new System.Windows.Forms.Padding(250, 0, 1, 0);
             this.cbxAlgorithmSelect.Name = "cbxAlgorithmSelect";
-            this.cbxAlgorithmSelect.Size = new System.Drawing.Size(300, 37);
+            this.cbxAlgorithmSelect.Size = new System.Drawing.Size(300, 42);
             // 
             // btnAlgRun
             // 
             this.btnAlgRun.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btnAlgRun.Image = ((System.Drawing.Image)(resources.GetObject("btnAlgRun.Image")));
+            this.btnAlgRun.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnAlgRun.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnAlgRun.Name = "btnAlgRun";
-            this.btnAlgRun.Size = new System.Drawing.Size(23, 34);
+            this.btnAlgRun.Size = new System.Drawing.Size(39, 39);
             this.btnAlgRun.Text = "toolStripButton3";
             // 
             // rdbCreate
@@ -281,6 +282,7 @@
             this.MinimumSize = new System.Drawing.Size(640, 432);
             this.Name = "mainForm";
             this.Text = "GraphVis";
+            this.Load += new System.EventHandler(this.ProgramLoaded);
             this.tstTop.ResumeLayout(false);
             this.tstTop.PerformLayout();
             this.tstMiddle.ResumeLayout(false);

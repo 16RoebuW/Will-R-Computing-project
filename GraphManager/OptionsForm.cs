@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,17 +13,21 @@ namespace GraphManager
 {
     public partial class OptionsForm : Form
     {
+        string cfgFilePath = Application.StartupPath + "\\options.cfg";
+        bool themeIsDark = false;
+        bool textIsLarge = false;
+
         public OptionsForm()
         {
             InitializeComponent();
         }
 
-        private void closeOptions(object sender, EventArgs e)
+        private void CloseOptions(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void itemChecked(object sender, ItemCheckEventArgs e)
+        private void ItemChecked(object sender, ItemCheckEventArgs e)
         {
             // Called before the item is actually checked/unchecked
             switch (optionsBox.SelectedIndex)
@@ -33,11 +38,13 @@ namespace GraphManager
                     // Default colours:
                     Color backColour = SystemColors.Control;
                     Color textColour = SystemColors.ControlText;
+                    themeIsDark = false;
                     if (e.CurrentValue == CheckState.Unchecked)
                     {
                         // Dark colours:
                         backColour = SystemColors.ControlDarkDark;
                         textColour = SystemColors.ControlLight;
+                        themeIsDark = true;
                     }
 
                     foreach (Form f in Application.OpenForms)
@@ -50,22 +57,52 @@ namespace GraphManager
                                 c.BackColor = textColour;
                             }
                             else
-                            {                            
-                                c.BackColor = backColour;
-                                c.ForeColor = textColour;
+                            {
+                                SetControlColours(c, backColour, textColour);
                             }
                             foreach (Control nestedControl in c.Controls)
                             {
-                                nestedControl.BackColor = backColour;
-                                nestedControl.ForeColor = textColour;
+                                SetControlColours(nestedControl, backColour, textColour);
                             }
                         }
                     }
-
                     break;
-                    
             }
-            
+
+            WriteOpsToFile(cfgFilePath);
+        }
+
+        private void WriteOpsToFile(string cfgFilePath)
+        {
+            string data = "";
+            for (int i = 0; i < optionsBox.Items.Count; i++)
+            {
+                // The condition after the '^' (XOR operator) is necessary due to the fact this is called before the item is actually checked/unchecked
+                if (optionsBox.GetItemCheckState(i) == CheckState.Checked ^ optionsBox.SelectedIndex == i)
+                {
+                    data += "1";
+                }
+                else
+                {
+                    data += "0";
+                }
+                data += "\n";
+            }
+            File.WriteAllText(cfgFilePath, data);
+        }
+
+        private void SetControlColours(Control control, Color backColour, Color textColour)
+        {
+            // This is a list of all controls that must have a white back colour
+            if ((control.Name == "cbxAlgorithmSelect" || control.Name == "optionsBox") && !themeIsDark)
+            {
+                control.BackColor = SystemColors.Window;
+            }
+            else
+            {
+                control.BackColor = backColour;
+            }
+            control.ForeColor = textColour;
         }
 
         public List<Control> GetAllControls(Form f)
@@ -76,6 +113,20 @@ namespace GraphManager
                 resultList.Add(c);
             }
             return resultList;
+        }
+
+        private void OptionsLoaded(object sender, EventArgs e)
+        {
+            string[] storedOps = File.ReadAllLines(cfgFilePath);
+            for (int i = 0; i < storedOps.Length; i++)
+            {
+                if (storedOps[i] == "1")
+                {
+                    optionsBox.SelectedIndex = i;
+                    ItemChecked(optionsBox, new ItemCheckEventArgs(i, CheckState.Checked, CheckState.Unchecked));
+                    optionsBox.SetItemCheckState(i, CheckState.Checked);
+                }
+            }
         }
     }
 }
