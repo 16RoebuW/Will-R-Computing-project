@@ -72,6 +72,10 @@ namespace GraphManager
             WriteOpsToFile(cfgFilePath);
         }
 
+        /// <summary>
+        /// Saves options to a config file
+        /// </summary>
+        /// <param name="cfgFilePath">The location of the file</param>
         private void WriteOpsToFile(string cfgFilePath)
         {
             string data = "";
@@ -91,6 +95,12 @@ namespace GraphManager
             File.WriteAllText(cfgFilePath, data);
         }
 
+        /// <summary>
+        /// Sets the foreColor and backColor of a control
+        /// </summary>
+        /// <param name="control">The control to have its colours changed</param>
+        /// <param name="backColour">The desired back colour</param>
+        /// <param name="textColour">The desired fore/text colour</param>
         private void SetControlColours(Control control, Color backColour, Color textColour)
         {
             // This is a list of all controls that must have a white back colour
@@ -105,23 +115,15 @@ namespace GraphManager
             control.ForeColor = textColour;
         }
 
-        public List<Control> GetAllControls(Form f)
-        {
-            List<Control> resultList = new List<Control>();
-            foreach (Control c in f.Controls)
-            {
-                resultList.Add(c);
-            }
-            return resultList;
-        }
-
         private void OptionsLoaded(object sender, EventArgs e)
         {
+            // When this form opens, check the boxes for the options that were saved in the file
             string[] storedOps = File.ReadAllLines(cfgFilePath);
             for (int i = 0; i < storedOps.Length; i++)
             {
                 if (storedOps[i] == "1")
                 {
+                    // Have to mimic a user clicking the boxes so that changes are handled correctly
                     optionsBox.SelectedIndex = i;
                     ItemChecked(optionsBox, new ItemCheckEventArgs(i, CheckState.Checked, CheckState.Unchecked));
                     optionsBox.SetItemCheckState(i, CheckState.Checked);

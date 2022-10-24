@@ -19,6 +19,7 @@ namespace GraphManager
 
         private void ProgramLoaded(object sender, EventArgs e)
         {
+            // While this code seems to do nothing, it actually has the effect of applying the saved options to the main form when the program starts
             OptionsForm optionsForm = new OptionsForm();
             optionsForm.Show();
             optionsForm.Close();
