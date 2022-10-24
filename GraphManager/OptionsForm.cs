@@ -32,6 +32,40 @@ namespace GraphManager
             // Called before the item is actually checked/unchecked
             switch (optionsBox.SelectedIndex)
             {
+                case 0:
+                    // Large text
+
+                    // Default font
+                    Font font = new Font("Segoe UI", 9, FontStyle.Regular);
+                    textIsLarge = false;
+                    if (e.CurrentValue == CheckState.Unchecked)
+                    {
+                        // Large font
+                        font = new Font("Arial", 16, FontStyle.Bold);
+                        textIsLarge = true;
+                    }
+
+                    // !!NEEDS FIXING!!
+                    foreach (Form f in Application.OpenForms)
+                    {
+                        foreach (Control c in f.Controls)
+                        {
+                            if (c.Name == "cbxAlgorithmSelect" || c.Name == "statusLabel")
+                            {
+                                c.Font = font;
+                            }
+
+                            foreach (Control nestedControl in c.Controls)
+                            {
+                                if (nestedControl.Name == "cbxAlgorithmSelect" || nestedControl.Name == "statusLabel")
+                                {
+                                    nestedControl.Font = font;
+                                }
+                            }
+                        }
+                    }
+
+                        break;
                 case 1:
                     // Dark theme
 
