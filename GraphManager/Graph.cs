@@ -9,9 +9,9 @@ namespace GraphManager
     class Graph
     {
         private bool wasSaved;
-        private List<Node> nodes;
         private int nodeID;
 
         public double minWeight;
+        public List<Node> nodes;
     }
 }
