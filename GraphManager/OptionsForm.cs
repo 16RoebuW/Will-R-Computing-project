@@ -45,24 +45,15 @@ namespace GraphManager
                         textIsLarge = true;
                     }
 
-                    // !!NEEDS FIXING!!
                     foreach (Form f in Application.OpenForms)
                     {
-                        foreach (Control c in f.Controls)
+                        // Checks if any open form is a mainForm, if so, change its fonts
+                        try
                         {
-                            if (c.Name == "cbxAlgorithmSelect" || c.Name == "statusLabel")
-                            {
-                                c.Font = font;
-                            }
-
-                            foreach (Control nestedControl in c.Controls)
-                            {
-                                if (nestedControl.Name == "cbxAlgorithmSelect" || nestedControl.Name == "statusLabel")
-                                {
-                                    nestedControl.Font = font;
-                                }
-                            }
+                            ((mainForm)f).ChangeFonts(font);
                         }
+                        catch (Exception error)
+                        { }
                     }
 
                         break;
@@ -138,7 +129,7 @@ namespace GraphManager
         private void SetControlColours(Control control, Color backColour, Color textColour)
         {
             // This is a list of all controls that must have a white back colour
-            if ((control.Name == "cbxAlgorithmSelect" || control.Name == "optionsBox") && !themeIsDark)
+            if ((control.Name == "cbxAlgorithmSelect" || control.Name == "optionsBox" || control.Name == "") && !themeIsDark)
             {
                 control.BackColor = SystemColors.Window;
             }

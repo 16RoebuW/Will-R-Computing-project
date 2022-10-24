@@ -30,5 +30,15 @@ namespace GraphManager
             OptionsForm optionsForm = new OptionsForm();
             optionsForm.Show();
         }
+
+        /// <summary>
+        /// Changes the fonts of some controls
+        /// </summary>
+        /// <param name="font">The font to be changed to</param>
+        public void ChangeFonts(Font font)
+        {
+            cbxAlgorithmSelect.Font = font;
+            statusLabel.Font = font;
+        }
     }
 }
