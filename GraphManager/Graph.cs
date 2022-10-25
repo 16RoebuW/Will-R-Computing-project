@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace GraphManager
 {
-    class Graph
+    public class Graph
     {
         private bool wasSaved;
-        private int nodeID;
 
+        public int nodeID;
         public double minWeight;
-        public List<Node> nodes;
+        public List<Node> nodes = new List<Node>();
     }
 }

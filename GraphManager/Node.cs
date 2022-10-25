@@ -6,17 +6,55 @@ using System.Threading.Tasks;
 
 namespace GraphManager
 {
-    class Node
-    {
+    public class Node
+    {        
         public string name;
-        public List<Arc> connections;
+        public List<Arc> connections = new List<Arc>();
+        public System.Drawing.Point location;
 
-        public Node(Graph parentGraph, string name)
-        {
-            int copies = 0;
-            if (parentGraph.nodes.Contains("bob"))
+        public Node(Graph parentGraph, string name, System.Drawing.Point location)
+        {            
+            if (name == "")
             {
-                
+                // Automatically assigns nodes with names A-Z, but if there are more than 26 they are named A1-Z1, then A2-Z2 and so on
+                if (parentGraph.nodeID > 25)
+                {
+                    this.name = (char)((parentGraph.nodeID % 26) + 65) + (parentGraph.nodeID / 26).ToString();
+                }
+                else
+                {
+                    this.name = ((char)(parentGraph.nodeID + 65)).ToString();
+                }
+                parentGraph.nodeID++;
+            }
+            else
+            {
+                int copies = 0;
+                string copyName = name;
+                this.name = copyName;
+                while (parentGraph.nodes.Contains(this))
+                {
+                    copies++;
+                    copyName = name + " (" + copies + ")";
+                    this.name = copyName;
+                }
+            }
+            // Range check for position (short hand for if location < 0, location = 0)
+            this.location.X = Math.Max(0, location.X);
+            this.location.Y = Math.Max(0, location.Y);
+        }
+
+        // I have overriden this function to change the behaviour of .Contains so that it returns true if a node is found with the same name as the parameter
+        // This post guided me to this solution: https://stackoverflow.com/questions/1076350/modify-list-contains-behavior
+        public override bool Equals(object obj)
+        {
+            if (obj is Node)
+            {
+                return ((Node)obj).name == name;
+            }
+            else
+            {
+                return base.Equals(obj);
             }
         }
 
@@ -25,10 +63,10 @@ namespace GraphManager
         /// </summary>
         /// <param name="n">Destination node</param>
         /// <param name="weight">Connection weight</param>
-        public void JoinTo(Node n, double weight)
+        public void JoinTo(Node n, string name, double weight)
         {
-            Arc outgoing = new Arc("", n, weight);
-            Arc incoming = new Arc("", this, weight);
+            Arc outgoing = new Arc(name, n, weight);
+            Arc incoming = new Arc(name, this, weight);
             connections.Add(outgoing);
             n.connections.Add(incoming);
         }

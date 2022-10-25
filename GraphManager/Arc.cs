@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GraphManager
 {
-    class Arc
+    public class Arc
     {
         private string name;
         private double weight;
@@ -51,7 +51,7 @@ namespace GraphManager
             // Range check
             if (val >= 0)
             {
-                weight = val;
+                weight = val;                
             }
         }
 

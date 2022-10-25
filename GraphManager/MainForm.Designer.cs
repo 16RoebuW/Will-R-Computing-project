@@ -140,6 +140,7 @@
             this.btnAlgRun.Name = "btnAlgRun";
             this.btnAlgRun.Size = new System.Drawing.Size(39, 39);
             this.btnAlgRun.Text = "toolStripButton3";
+            this.btnAlgRun.Click += new System.EventHandler(this.btnAlgRun_Click);
             // 
             // rdbCreate
             // 
