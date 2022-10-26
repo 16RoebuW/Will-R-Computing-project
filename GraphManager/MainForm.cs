@@ -215,7 +215,7 @@ namespace GraphManager
                         {
                             // Centerpoint between nodes
                             Location = new Point((a.between[0].location.X + a.between[1].location.X) / 2,
-                                                 (a.between[0].location.Y + a.between[1].location.Y) / 2),
+                                                    (a.between[0].location.Y + a.between[1].location.Y) / 2),
                             Tag = "Edge Label",
                             Size = new Size(75, 75),
                             Name = a.ID.ToString()
@@ -310,6 +310,7 @@ namespace GraphManager
             DisplayGraph(activeGraph);
             activeNode = null;
         }
+
         private void btnAlgRun_Click(object sender, EventArgs e)
         {
             // !!Testing code!!
