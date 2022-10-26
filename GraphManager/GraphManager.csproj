@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arc.cs" />
+    <Compile Include="EdgeEditDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EdgeEditDialogue.Designer.cs">
+      <DependentUpon>EdgeEditDialogue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Graph.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -55,6 +61,12 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Node.cs" />
+    <Compile Include="NodeEditDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NodeEditDialogue.Designer.cs">
+      <DependentUpon>NodeEditDialogue.cs</DependentUpon>
+    </Compile>
     <Compile Include="OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,8 +75,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="EdgeEditDialogue.resx">
+      <DependentUpon>EdgeEditDialogue.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NodeEditDialogue.resx">
+      <DependentUpon>NodeEditDialogue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsForm.resx">
       <DependentUpon>OptionsForm.cs</DependentUpon>

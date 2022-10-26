@@ -11,13 +11,16 @@ namespace GraphManager
         private string name;
         private double weight;
 
-        public Node destination;
+        public int ID;
+        public Node[] between = new Node[2];
 
-        public Arc(string name, Node destination, double weight)
+        public Arc(string name, Node destination, double weight, ref int IDCount)
         {
             this.name = name;
-            this.destination = destination;
+            between[1] = destination;
             this.weight = weight;
+            ID = IDCount;
+            IDCount++;
         }
 
         /// <summary>
@@ -62,6 +65,25 @@ namespace GraphManager
         public double GetWeight()
         {
             return weight;
+        }
+
+        /// <summary>
+        /// Returns the node that can be travelled to from the input via this arc, similar to the old "destination" value
+        /// </summary>
+        /// <param name="start">Start node</param>
+        /// <returns></returns>
+        public Node GetDestination(Node start)
+        {
+            // Efficiency step
+            Node firstItem = between[0];
+            if (firstItem == start)
+            {
+                return between[1];
+            }
+            else
+            {
+                return firstItem;
+            }
         }
     }
 }

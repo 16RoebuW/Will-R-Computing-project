@@ -38,7 +38,7 @@
             this.btnAlgRun = new System.Windows.Forms.ToolStripButton();
             this.rdbCreate = new System.Windows.Forms.RadioButton();
             this.rdbEdit = new System.Windows.Forms.RadioButton();
-            this.rbdDelete = new System.Windows.Forms.RadioButton();
+            this.rdbDelete = new System.Windows.Forms.RadioButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.icoCreate = new System.Windows.Forms.PictureBox();
@@ -167,16 +167,16 @@
             this.rdbEdit.Text = "Edit Mode";
             this.rdbEdit.UseVisualStyleBackColor = true;
             // 
-            // rbdDelete
+            // rdbDelete
             // 
-            this.rbdDelete.AutoSize = true;
-            this.rbdDelete.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
-            this.rbdDelete.Location = new System.Drawing.Point(232, 76);
-            this.rbdDelete.Name = "rbdDelete";
-            this.rbdDelete.Size = new System.Drawing.Size(174, 34);
-            this.rbdDelete.TabIndex = 4;
-            this.rbdDelete.Text = "Delete Mode";
-            this.rbdDelete.UseVisualStyleBackColor = true;
+            this.rdbDelete.AutoSize = true;
+            this.rdbDelete.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
+            this.rdbDelete.Location = new System.Drawing.Point(232, 76);
+            this.rdbDelete.Name = "rdbDelete";
+            this.rdbDelete.Size = new System.Drawing.Size(174, 34);
+            this.rdbDelete.TabIndex = 4;
+            this.rdbDelete.Text = "Delete Mode";
+            this.rdbDelete.UseVisualStyleBackColor = true;
             // 
             // statusStrip
             // 
@@ -274,7 +274,7 @@
             this.Controls.Add(this.zoomPanel);
             this.Controls.Add(this.icoCreate);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.rbdDelete);
+            this.Controls.Add(this.rdbDelete);
             this.Controls.Add(this.rdbEdit);
             this.Controls.Add(this.rdbCreate);
             this.Controls.Add(this.tstMiddle);
@@ -311,7 +311,7 @@
         private System.Windows.Forms.ToolStripButton btnLoad;
         private System.Windows.Forms.RadioButton rdbCreate;
         private System.Windows.Forms.RadioButton rdbEdit;
-        private System.Windows.Forms.RadioButton rbdDelete;
+        private System.Windows.Forms.RadioButton rdbDelete;
         private System.Windows.Forms.ToolStripButton btnOptions;
         private System.Windows.Forms.ToolStripComboBox cbxAlgorithmSelect;
         private System.Windows.Forms.ToolStripButton btnAlgRun;

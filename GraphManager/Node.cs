@@ -63,12 +63,12 @@ namespace GraphManager
         /// </summary>
         /// <param name="n">Destination node</param>
         /// <param name="weight">Connection weight</param>
-        public void JoinTo(Node n, string name, double weight)
+        public void JoinTo(Node n, string name, double weight, ref int IDCount)
         {
-            Arc outgoing = new Arc(name, n, weight);
-            Arc incoming = new Arc(name, this, weight);
-            connections.Add(outgoing);
-            n.connections.Add(incoming);
+            Arc connection = new Arc(name, n, weight, ref IDCount);
+            connection.between[0] = this;
+            connections.Add(connection);
+            n.connections.Add(connection);
         }
     }
 }

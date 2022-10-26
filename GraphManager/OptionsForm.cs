@@ -52,7 +52,7 @@ namespace GraphManager
                         {
                             ((mainForm)f).ChangeFonts(font);
                         }
-                        catch (Exception error)
+                        catch 
                         { }
                     }
 
@@ -143,7 +143,16 @@ namespace GraphManager
         private void OptionsLoaded(object sender, EventArgs e)
         {
             // When this form opens, check the boxes for the options that were saved in the file
-            string[] storedOps = File.ReadAllLines(cfgFilePath);
+            string[] storedOps = new string[0];
+            try
+            {
+                storedOps = File.ReadAllLines(cfgFilePath);
+            }
+            catch
+            {
+                // If the file does not exist yet, create it.
+                File.WriteAllText(cfgFilePath, "");
+            }
             for (int i = 0; i < storedOps.Length; i++)
             {
                 if (storedOps[i] == "1")
