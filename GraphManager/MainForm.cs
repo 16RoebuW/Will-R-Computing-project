@@ -120,11 +120,17 @@ namespace GraphManager
             }
         }
 
-        public Node FindNodeWithName(List<Node> nodes, string text)
+        /// <summary>
+        /// Returns a node from a list of nodes that has the name specified. Returns null and displays a message if not found
+        /// </summary>
+        /// <param name="nodes">The list to be searched</param>
+        /// <param name="name">The name the node should have</param>
+        /// <returns></returns>
+        public Node FindNodeWithName(List<Node> nodes, string name)
         {
             foreach (Node node in nodes)
             {
-                if (node.name == text)
+                if (node.name == name)
                 {
                     return node;
                 }
@@ -133,6 +139,11 @@ namespace GraphManager
             return null;
         }
 
+        /// <summary>
+        /// Takes an integer input and returns the arc with that ID
+        /// </summary>
+        /// <param name="id">The ID the arc should have</param>
+        /// <returns></returns>
         private Arc FindArcFromID(int id)
         {
             // O(N^2) complexity here is bad, should be improved in future, perhaps with indexing
@@ -159,6 +170,10 @@ namespace GraphManager
             statusLabel.Font = font;
         }
 
+        /// <summary>
+        /// Clears all graph related controls and draws a new graph using paint and buttons
+        /// </summary>
+        /// <param name="input">The graph that should be drawn</param>
         public void DisplayGraph(Graph input)
         {
             // Clear existing graph
@@ -254,6 +269,12 @@ namespace GraphManager
             }
         }
 
+        /// <summary>
+        /// Changes various properties of an the active edge
+        /// </summary>
+        /// <param name="mode">0 = Set name and weight, 1 = Set name, 2 = Set weight, 3/other = None</param>
+        /// <param name="newName">The name that should be set or not</param>
+        /// <param name="newWeight">The weight that should be set or not</param>
         public void EditEdge(int mode, string newName, double newWeight)
         {
             switch (mode)
@@ -279,6 +300,10 @@ namespace GraphManager
             activeEdge = null;
         }
 
+        /// <summary>
+        /// Sets the active node's name to the string
+        /// </summary>
+        /// <param name="newName">The name that should be set</param>
         public void EditNode(string newName)
         {
             activeNode.name = newName;
