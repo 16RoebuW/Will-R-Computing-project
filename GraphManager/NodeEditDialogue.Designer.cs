@@ -73,6 +73,7 @@
             this.tbxName.Name = "tbxName";
             this.tbxName.Size = new System.Drawing.Size(432, 37);
             this.tbxName.TabIndex = 6;
+            this.tbxName.TextChanged += new System.EventHandler(this.Name_TextChanged);
             // 
             // NodeEditDialogue
             // 

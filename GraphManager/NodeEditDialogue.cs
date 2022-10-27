@@ -30,5 +30,13 @@ namespace GraphManager
                 Close();
             }
         }
+
+        private void Name_TextChanged(object sender, EventArgs e)
+        {
+            if (tbxName.Text.Length == 30)
+            {
+                MessageBox.Show("Max name length is 30");
+            }
+        }
     }
 }

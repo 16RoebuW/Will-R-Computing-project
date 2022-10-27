@@ -279,11 +279,15 @@
             this.Controls.Add(this.rdbCreate);
             this.Controls.Add(this.tstMiddle);
             this.Controls.Add(this.tstTop);
+            this.KeyPreview = true;
             this.MaximumSize = new System.Drawing.Size(3840, 1888);
             this.MinimumSize = new System.Drawing.Size(640, 432);
             this.Name = "mainForm";
             this.Text = "GraphVis";
             this.Load += new System.EventHandler(this.ProgramLoaded);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Main_KeyUp);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.BackClicked);
             this.tstTop.ResumeLayout(false);
             this.tstTop.PerformLayout();
             this.tstMiddle.ResumeLayout(false);

@@ -6,6 +6,7 @@ using System.Data.SqlTypes;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,6 +47,7 @@ namespace GraphManager
 
         private void HandleEdgeClick(object sender, EventArgs e)
         {
+            statusLabel.Text = "";
             Button btnSender = sender as Button;
             if (rdbCreate.Checked)
             {
@@ -93,9 +95,18 @@ namespace GraphManager
                 if (statusLabel.Text.Contains("Select the node to connect to:"))
                 {
                     string[] parsedText = statusLabel.Text.Split(':');
-                    activeNode.JoinTo(FindNodeWithName(activeGraph.nodes, parsedText[1]), "", 0, ref IDCount);
-                    statusLabel.Text = "";
-                    DisplayGraph(activeGraph);
+                    Node destination = FindNodeWithName(activeGraph.nodes, parsedText[1]);
+                    if (activeNode == destination)
+                    {
+                        statusLabel.Text = "Edge creation cancelled, you cannot join a node to itself";                        
+                    }
+                    else
+                    {
+                        activeNode.JoinTo(destination, "", 0, ref IDCount);
+                        statusLabel.Text = "";
+                        DisplayGraph(activeGraph);
+                    }
+                    
                 }
                 else
                 { 
@@ -105,14 +116,26 @@ namespace GraphManager
             else if (rdbEdit.Checked)
             {
                 // Edit mode
-
+                statusLabel.Text = "";
                 NodeEditDialogue editWindow = new NodeEditDialogue();
                 editWindow.ShowDialog(this);
             }
             else if (rdbDelete.Checked)
             {
                 // Delete mode
-
+                statusLabel.Text = "";
+                activeNode = FindNodeWithName(activeGraph.nodes, btnSender.Text);
+                // Delete all connections to this node
+                for (int i = 0; i < activeNode.connections.Count; i++)
+                {
+                    // Gets the node at the other end of the arc from the deleted node
+                    Node destination = activeNode.connections[i].GetDestination(activeNode);
+                    // Removes the arc from the destination node's list
+                    destination.connections.Remove(activeNode.connections[i]);
+                }
+                activeGraph.nodes.Remove(activeNode);
+                // Refresh display
+                DisplayGraph(activeGraph);
             }
             else
             {
@@ -199,9 +222,11 @@ namespace GraphManager
                     Location = n.location,
                     Text = n.name,
                     Tag = "Graph Part",
-                    Size = new Size(234, 45)
+                    Size = new Size(234, 45),
                 };
+
                 btnNode.Click += new EventHandler(HandleNodeClick);
+                btnNode.LocationChanged += new EventHandler(HandleNodeDrag);
                 Controls.Add(btnNode);
 
                 // Draw arcs to each connected node 
@@ -250,6 +275,21 @@ namespace GraphManager
             }           
         }
 
+        private void HandleNodeDrag(object sender, EventArgs e)
+        {           
+            Button btn = sender as Button;
+            // Keeps the location inside the bounds of the form
+            // 79 is the height of the two toolbars at the top
+            // 36 is the height of the flow layout panel at the bottom
+            // Location is the top left of the button, so I need to subtract its width/height from the min limits
+            btn.Location = new Point(Math.Min(this.Width - btn.Width, Math.Max(0, btn.Location.X)),
+                                        Math.Min(this.Height - 36 - statusStrip.Size.Height - btn.Height, Math.Max(79, btn.Location.Y)));
+            btn.BringToFront();
+            activeNode = FindNodeWithName(activeGraph.nodes, btn.Text);
+            activeNode.location = btn.Location;
+            this.Invalidate(); 
+        }
+
         // Called on "this.Invalidate()", clears the canvas each time
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -282,7 +322,14 @@ namespace GraphManager
                 case 0:
                     // Change both
                     activeEdge.SetName(newName);
-                    activeEdge.SetWeight(newWeight);
+                    if (newWeight < 0)
+                    {
+                        MessageBox.Show("Weight must be positive, value not changed");
+                    }
+                    else
+                    {
+                        activeEdge.SetWeight(newWeight);
+                    }
                     break;
                 case 1:
                     // Change name
@@ -290,7 +337,14 @@ namespace GraphManager
                     break;
                 case 2:
                     // Change weight
-                    activeEdge.SetWeight(newWeight);
+                    if (newWeight < 0)
+                    {
+                        MessageBox.Show("Weight must be positive, value not changed");
+                    }
+                    else
+                    {
+                        activeEdge.SetWeight(newWeight);
+                    }
                     break;
                 case 3:
                     // Do nothing
@@ -306,7 +360,17 @@ namespace GraphManager
         /// <param name="newName">The name that should be set</param>
         public void EditNode(string newName)
         {
-            activeNode.name = newName;
+            // To ensure no identical names are created, we must destroy the existing node and replace it with one with the new name
+            // This way, the validation inside the node constructor can be carried out
+            // First, store all attributes of the node (except name)
+            List<Arc> oldConnections = activeNode.connections;
+            Point oldLocation = activeNode.location;
+
+            activeGraph.nodes.Remove(activeNode);
+
+            activeGraph.nodes.Add(new Node(activeGraph, newName, oldLocation));
+            activeGraph.nodes.Last().connections = oldConnections;
+
             DisplayGraph(activeGraph);
             activeNode = null;
         }
@@ -321,6 +385,55 @@ namespace GraphManager
             graph.nodes[0].JoinTo(graph.nodes[1], "M2", 5, ref IDCount);
             graph.nodes[1].JoinTo(graph.nodes[2], "", 0, ref IDCount);
             DisplayGraph(graph);
+        }
+
+        private void Main_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.G)
+            {
+                Cursor = Cursors.SizeAll;
+
+                foreach (Control c in this.Controls)
+                {
+                    // Remove all click events temporarily
+                    if ((string)c.Tag == "Graph Part" && c is Button)
+                    {
+                        c.Click -= new EventHandler(HandleNodeClick);
+                        // Using the Control.Draggable NuGet package
+                        c.Draggable(true);
+                    }
+                }
+            }
+        }
+
+        private void Main_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.G)
+            {
+                Cursor = Cursors.Default;
+
+                foreach (Control c in this.Controls)
+                {
+                    // Restore event handlers
+                    if ((string)c.Tag == "Graph Part" && c is Button)
+                    {
+                        c.Click += new EventHandler(HandleNodeClick);
+                        c.Draggable(false);
+                    }
+                }
+
+                // Refresh graph after movement is done
+                DisplayGraph(activeGraph);
+            }
+        }
+
+        private void BackClicked(object sender, MouseEventArgs e)
+        {
+            if (rdbCreate.Checked)
+            {
+                activeGraph.nodes.Add(new Node(activeGraph, "", e.Location));
+                DisplayGraph(activeGraph);
+            }
         }
     }
 }

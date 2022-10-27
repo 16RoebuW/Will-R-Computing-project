@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace GraphManager
 {
     public class Node
-    {        
+    {
         public string name;
         public List<Arc> connections = new List<Arc>();
         public System.Drawing.Point location;
