@@ -21,6 +21,8 @@ namespace GraphManager
         public Arc activeEdge;
         public Node activeNode;
         public int IDCount = 0;
+        public float zoomLevel = 1;
+        public float prevZoomLevel = 1;
 
 
         public mainForm()
@@ -86,7 +88,7 @@ namespace GraphManager
         private void HandleNodeClick(object sender, EventArgs e)
         {
             Button btnSender = sender as Button;
-            activeNode = FindNodeWithName(activeGraph.nodes, btnSender.Text);
+            activeNode = FindNodeWithName(activeGraph.nodes, btnSender.Name);
 
             if (rdbCreate.Checked)
             {
@@ -124,7 +126,7 @@ namespace GraphManager
             {
                 // Delete mode
                 statusLabel.Text = "";
-                activeNode = FindNodeWithName(activeGraph.nodes, btnSender.Text);
+                activeNode = FindNodeWithName(activeGraph.nodes, btnSender.Name);
                 // Delete all connections to this node
                 for (int i = 0; i < activeNode.connections.Count; i++)
                 {
@@ -220,10 +222,18 @@ namespace GraphManager
                 Button btnNode = new Button
                 {
                     Location = n.location,
-                    Text = n.name,
+                    Name = n.name,
                     Tag = "Graph Part",
-                    Size = new Size(234, 45),
+                    Size = new Size((int)(234f * zoomLevel), (int)(45f * zoomLevel)),
                 };
+                if (zoomLevel <= 0.5)
+                {
+                    btnNode.Text = ShortenText(btnNode.Name);
+                }
+                else
+                {
+                    btnNode.Text = btnNode.Name;
+                }
 
                 btnNode.Click += new EventHandler(HandleNodeClick);
                 btnNode.LocationChanged += new EventHandler(HandleNodeDrag);
@@ -242,33 +252,57 @@ namespace GraphManager
                             Location = new Point((a.between[0].location.X + a.between[1].location.X) / 2,
                                                     (a.between[0].location.Y + a.between[1].location.Y) / 2),
                             Tag = "Edge Label",
-                            Size = new Size(75, 75),
+                            Size = new Size((int)(75f * zoomLevel), (int)(75f * zoomLevel)),
                             Name = a.ID.ToString()
                         };
 
                         // When this button is clicked, call the HandleEdgeClick procedure
                         btnArc.Click += new EventHandler(HandleEdgeClick);
 
-                        if (a.GetWeight() == 0)
+                        if (zoomLevel > 0.5)
                         {
-                            if (a.GetName() == "")
+                            if (a.GetWeight() == 0)
                             {
-                                btnArc.Text = "_";
+                                if (a.GetName() == "")
+                                {
+                                    btnArc.Text = "_";
+                                }
+                                else
+                                {
+                                    btnArc.Text = a.GetName();
+                                }
+                            }
+                            else if (a.GetName() == "")
+                            {
+                                btnArc.Text = "Weight = " + a.GetWeight();
                             }
                             else
                             {
-                                btnArc.Text = a.GetName();
+                                btnArc.Text = a.GetName() + ", weight = " + a.GetWeight();
                             }
-                        }
-                        else if (a.GetName() == "")
-                        {
-                            btnArc.Text = "Weight = " + a.GetWeight();
                         }
                         else
                         {
-                            btnArc.Text = a.GetName() + ", weight = " + a.GetWeight();
+                            if (a.GetWeight() == 0)
+                            {
+                                if (a.GetName() == "")
+                                {
+                                    btnArc.Text = "_";
+                                }
+                                else
+                                {
+                                    btnArc.Text = ShortenText(a.GetName());
+                                }
+                            }
+                            else if (a.GetName() == "")
+                            {
+                                btnArc.Text = "W: " + a.GetWeight();
+                            }
+                            else
+                            {
+                                btnArc.Text = ShortenText(a.GetName()) + ", W: " + a.GetWeight();
+                            }
                         }
-
                         Controls.Add(btnArc);
                     }
                 }
@@ -285,7 +319,7 @@ namespace GraphManager
             btn.Location = new Point(Math.Min(this.Width - btn.Width, Math.Max(0, btn.Location.X)),
                                         Math.Min(this.Height - 36 - statusStrip.Size.Height - btn.Height, Math.Max(79, btn.Location.Y)));
             btn.BringToFront();
-            activeNode = FindNodeWithName(activeGraph.nodes, btn.Text);
+            activeNode = FindNodeWithName(activeGraph.nodes, btn.Name);
             activeNode.location = btn.Location;
             this.Invalidate(); 
         }
@@ -297,7 +331,7 @@ namespace GraphManager
 
             base.OnPaint(e);
 
-            using (var blackPen = new Pen(Color.Black, 3))
+            using (var blackPen = new Pen(Color.Black, 3 * zoomLevel * zoomLevel))
             {
                 foreach (Node n in activeGraph.nodes)
                 {
@@ -378,13 +412,51 @@ namespace GraphManager
         private void btnAlgRun_Click(object sender, EventArgs e)
         {
             // !!Testing code!!
+            // Graph A
             Graph graph = new Graph();
-            graph.nodes.Add(new Node(graph, "Cottonshopeburnfoot", new Point(500, 500)));
-            graph.nodes.Add(new Node(graph, "", new Point(900, 400)));
-            graph.nodes.Add(new Node(graph, "", new Point(200, 200)));
-            graph.nodes[0].JoinTo(graph.nodes[1], "M2", 5, ref IDCount);
-            graph.nodes[1].JoinTo(graph.nodes[2], "", 0, ref IDCount);
-            DisplayGraph(graph);
+            graph.nodes.Add(new Node(graph, "Cammeringham Hill", new Point(20, 100)));
+            graph.nodes.Add(new Node(graph, "Álta", new Point(300, 300)));
+            graph.nodes.Add(new Node(graph, "B", new Point(700, 500)));
+            graph.nodes.Add(new Node(graph, "Barton-upon-Humber", new Point(500, 700)));
+            graph.nodes[0].JoinTo(graph.nodes[1], "", 8, ref IDCount);
+            graph.nodes[0].JoinTo(graph.nodes[2], "", 3, ref IDCount);
+            graph.nodes[0].JoinTo(graph.nodes[3], "", 5, ref IDCount);
+            graph.nodes[1].JoinTo(graph.nodes[2], "", 1, ref IDCount);
+            graph.nodes[1].JoinTo(graph.nodes[3], "", 2, ref IDCount);
+            graph.nodes[2].JoinTo(graph.nodes[3], "", 9, ref IDCount);
+
+            // Graph B
+            Graph graph1 = new Graph();
+            graph1.nodes.Add(new Node(graph1, "Riga", new Point(100, 100)));
+            graph1.nodes.Add(new Node(graph1, "Dreilini", new Point(400, 200)));
+            graph1.nodes.Add(new Node(graph1, "Valdlauči", new Point(200, 500)));
+            graph1.nodes.Add(new Node(graph1, "Mārupe", new Point(20, 300)));
+            graph1.nodes.Add(new Node(graph1, "Kekava", new Point(250, 800)));
+            graph1.nodes.Add(new Node(graph1, "Saurieši", new Point(600, 300)));
+            graph1.nodes[0].JoinTo(graph1.nodes[1], "", 8, ref IDCount);
+            graph1.nodes[0].JoinTo(graph1.nodes[2], "", 3, ref IDCount);
+            graph1.nodes[0].JoinTo(graph1.nodes[3], "", 4, ref IDCount);
+            graph1.nodes[1].JoinTo(graph1.nodes[2], "", 1, ref IDCount);
+            graph1.nodes[1].JoinTo(graph1.nodes[5], "", 6, ref IDCount);
+            graph1.nodes[2].JoinTo(graph1.nodes[3], "", 2, ref IDCount);
+            graph1.nodes[2].JoinTo(graph1.nodes[4], "", 5, ref IDCount);
+
+            // Graph C
+            Graph graph2 = new Graph();
+            graph2.nodes.Add(new Node(graph2, "St Louis", new Point(500, 100)));
+            graph2.nodes.Add(new Node(graph2, "Dallas", new Point(20, 200)));
+            graph2.nodes.Add(new Node(graph2, "Memphis", new Point(700, 200)));
+            graph2.nodes.Add(new Node(graph2, "Austin", new Point(15, 400)));
+            graph2.nodes.Add(new Node(graph2, "Houston", new Point(550, 300)));
+            graph2.nodes.Add(new Node(graph2, "New Orleans", new Point(750, 500)));
+            graph2.nodes.Add(new Node(graph2, "San Antonio", new Point(300, 700)));
+            graph2.nodes[0].JoinTo(graph2.nodes[1], "", 4, ref IDCount);
+            graph2.nodes[1].JoinTo(graph2.nodes[3], "", 53, ref IDCount);
+            graph2.nodes[4].JoinTo(graph2.nodes[5], "", 34, ref IDCount);
+            graph2.nodes[5].JoinTo(graph2.nodes[6], "", 105, ref IDCount);
+          
+
+            DisplayGraph(graph2);
         }
 
         private void Main_KeyDown(object sender, KeyEventArgs e)
@@ -434,6 +506,100 @@ namespace GraphManager
                 activeGraph.nodes.Add(new Node(activeGraph, "", e.Location));
                 DisplayGraph(activeGraph);
             }
+        }
+
+        private void ZoomLvlChanged(object sender, EventArgs e)
+        {
+            zoomLevel = (225-trbZoom.Value) / 100f;
+            foreach (Control c in this.Controls)
+            {
+                if ((string)c.Tag == "Graph Part" || (string)c.Tag == "Edge Label")
+                {
+                    SizeF ratio = new SizeF(zoomLevel / prevZoomLevel, zoomLevel / prevZoomLevel);
+                    Point oldLocation = c.Location;
+                    c.Scale(ratio);
+                    // Because for some reason this scales the controls about (0,0)
+                    c.Location = oldLocation;
+
+                    if (zoomLevel <= 0.5 && prevZoomLevel > 0.5)
+                    {
+                        if ((string)c.Tag == "Graph Part")
+                        {
+                            c.Text = ShortenText(c.Text);
+                        }
+                        else
+                        {
+                            activeEdge = FindArcFromID(Convert.ToInt32(c.Name));
+                            if (activeEdge.GetWeight() == 0)
+                            {
+                                if (activeEdge.GetName() == "")
+                                {
+                                    c.Text = "_";
+                                }
+                                else
+                                {
+                                    c.Text = activeEdge.GetName();
+                                }
+                            }
+                            else if (activeEdge.GetName() == "")
+                            {
+                                c.Text = "W: " + activeEdge.GetWeight();
+                            }
+                            else
+                            {
+                                c.Text = ShortenText(activeEdge.GetName()) + ", W: " + activeEdge.GetWeight();
+                            }
+                            
+                        }
+                    }
+                    else if (zoomLevel > 0.5 && prevZoomLevel <= 0.5)
+                    {
+                        
+                        if ((string)c.Tag == "Graph Part")
+                        {
+                            c.Text = c.Name;
+                        }
+                        else
+                        {
+                            activeEdge = FindArcFromID(Convert.ToInt32(c.Name));
+                            if (activeEdge.GetWeight() == 0)
+                            {
+                                if (activeEdge.GetName() == "")
+                                {
+                                    c.Text = "_";
+                                }
+                                else
+                                {
+                                    c.Text = activeEdge.GetName();
+                                }
+                            }
+                            else if (activeEdge.GetName() == "")
+                            {
+                                c.Text = "Weight = " + activeEdge.GetWeight();
+                            }
+                            else
+                            {
+                                c.Text = activeEdge.GetName() + ", weight = " + activeEdge.GetWeight();
+                            }
+                        }
+                    }
+                }
+            }
+            prevZoomLevel = zoomLevel;
+        }
+
+        private string ShortenText(string input)
+        {
+            string[] words = input.Split(' ','-');
+            string output = "";
+            foreach (string word in words)
+            {
+                if (word.Length > 0)
+                {                    
+                    output += word[0].ToString().ToUpper();
+                }
+            }
+            return output;
         }
     }
 }

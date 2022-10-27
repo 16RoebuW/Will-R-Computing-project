@@ -229,10 +229,17 @@
             // 
             // trbZoom
             // 
+            this.trbZoom.LargeChange = 100;
             this.trbZoom.Location = new System.Drawing.Point(1431, 3);
+            this.trbZoom.Maximum = 200;
+            this.trbZoom.Minimum = 25;
             this.trbZoom.Name = "trbZoom";
             this.trbZoom.Size = new System.Drawing.Size(104, 45);
+            this.trbZoom.SmallChange = 25;
             this.trbZoom.TabIndex = 8;
+            this.trbZoom.TickFrequency = 25;
+            this.trbZoom.Value = 100;
+            this.trbZoom.Scroll += new System.EventHandler(this.ZoomLvlChanged);
             // 
             // icoZoomIn
             // 
