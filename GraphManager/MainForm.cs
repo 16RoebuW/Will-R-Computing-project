@@ -23,6 +23,8 @@ namespace GraphManager
         public int IDCount = 0;
         public float zoomLevel = 1;
         public float prevZoomLevel = 1;
+        public bool themeIsDark = false;
+        public bool textIsLarge = false;
 
 
         public mainForm()
@@ -191,8 +193,23 @@ namespace GraphManager
         /// <param name="font">The font to be changed to</param>
         public void ChangeFonts(Font font)
         {
+            if (font.Size > cbxAlgorithmSelect.Font.Size)
+            {
+                textIsLarge = true;
+            }
+            else
+            {
+                textIsLarge = false;
+            }
             cbxAlgorithmSelect.Font = font;
             statusLabel.Font = font;
+            foreach (Control c in this.Controls)
+            {
+                if ((string)c.Tag == "Graph Part" || (string)c.Tag == "Edge Label")
+                {
+                    c.Font = font;
+                }
+            }
         }
 
         /// <summary>
@@ -216,6 +233,20 @@ namespace GraphManager
             activeGraph = input;
             this.Invalidate();
 
+            Color backColour = SystemColors.Control;
+            Color textColour = SystemColors.ControlText;
+            if (themeIsDark)
+            {
+                backColour = SystemColors.ControlDarkDark;
+                textColour = SystemColors.ControlLight;
+            }
+
+            Font font = new Font("Segoe UI", 9, FontStyle.Regular);
+            if (textIsLarge)
+            {
+                font = new Font("Arial", 16, FontStyle.Bold);
+            }
+
             foreach (Node n in input.nodes)
             {
                 // Create button to represent node
@@ -224,7 +255,13 @@ namespace GraphManager
                     Location = n.location,
                     Name = n.name,
                     Tag = "Graph Part",
-                    Size = new Size((int)(234f * zoomLevel), (int)(45f * zoomLevel)),
+                    BackColor = backColour,
+                    ForeColor = textColour,
+                    Font = font,
+                    MaximumSize = new Size((int)(300f * zoomLevel), (int)(70f * zoomLevel)),
+                    MinimumSize = new Size((int)(0f * zoomLevel), (int)(70f * zoomLevel)),
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink
                 };
                 if (zoomLevel <= 0.5)
                 {
@@ -252,9 +289,16 @@ namespace GraphManager
                             Location = new Point((a.between[0].location.X + a.between[1].location.X) / 2,
                                                     (a.between[0].location.Y + a.between[1].location.Y) / 2),
                             Tag = "Edge Label",
-                            Size = new Size((int)(75f * zoomLevel), (int)(75f * zoomLevel)),
+                            BackColor = backColour,
+                            ForeColor = textColour,
+                            Font = font,
+                            MaximumSize = new Size((int)(300f * zoomLevel), (int)(70f * zoomLevel)),
+                            MinimumSize = new Size((int)(0f * zoomLevel), (int)(70f * zoomLevel)),
+                            AutoSize = true,
+                            AutoSizeMode = AutoSizeMode.GrowAndShrink,
                             Name = a.ID.ToString()
                         };
+                        
 
                         // When this button is clicked, call the HandleEdgeClick procedure
                         btnArc.Click += new EventHandler(HandleEdgeClick);

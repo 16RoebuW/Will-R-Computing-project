@@ -48,6 +48,7 @@
             this.icoZoomIn = new System.Windows.Forms.PictureBox();
             this.icoEdit = new System.Windows.Forms.PictureBox();
             this.icoDelete = new System.Windows.Forms.PictureBox();
+            this.icoG = new System.Windows.Forms.PictureBox();
             this.tstTop.SuspendLayout();
             this.tstMiddle.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -58,6 +59,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomIn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoG)).BeginInit();
             this.SuspendLayout();
             // 
             // tstTop
@@ -271,6 +273,16 @@
             this.icoDelete.TabIndex = 12;
             this.icoDelete.TabStop = false;
             // 
+            // icoG
+            // 
+            this.icoG.Image = ((System.Drawing.Image)(resources.GetObject("icoG.Image")));
+            this.icoG.Location = new System.Drawing.Point(0, 732);
+            this.icoG.Name = "icoG";
+            this.icoG.Size = new System.Drawing.Size(70, 35);
+            this.icoG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.icoG.TabIndex = 13;
+            this.icoG.TabStop = false;
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,6 +291,7 @@
             this.Controls.Add(this.icoDelete);
             this.Controls.Add(this.icoEdit);
             this.Controls.Add(this.zoomPanel);
+            this.Controls.Add(this.icoG);
             this.Controls.Add(this.icoCreate);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.rdbDelete);
@@ -309,6 +322,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomIn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoG)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -335,6 +349,7 @@
         private System.Windows.Forms.PictureBox icoZoomIn;
         private System.Windows.Forms.PictureBox icoEdit;
         private System.Windows.Forms.PictureBox icoDelete;
+        private System.Windows.Forms.PictureBox icoG;
     }
 }
 

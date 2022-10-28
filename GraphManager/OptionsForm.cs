@@ -51,6 +51,7 @@ namespace GraphManager
                         try
                         {
                             ((mainForm)f).ChangeFonts(font);
+                            ((mainForm)f).themeIsDark = true;
                         }
                         catch 
                         { }
