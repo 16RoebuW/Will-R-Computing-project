@@ -51,7 +51,6 @@ namespace GraphManager
                         try
                         {
                             ((mainForm)f).ChangeFonts(font);
-                            ((mainForm)f).themeIsDark = true;
                         }
                         catch 
                         { }
@@ -76,6 +75,7 @@ namespace GraphManager
                     foreach (Form f in Application.OpenForms)
                     {
                         f.BackColor = backColour;
+                        ((mainForm)f).themeIsDark = themeIsDark;
                         foreach (Control c in f.Controls)
                         {
                             if (c.Name == "darkThemeIndicator")

@@ -15,7 +15,12 @@ namespace GraphManager
         public double minWeight;
         public List<Node> nodes = new List<Node>();
 
-        public void Save(string path, bool autosave)
+        /// <summary>
+        /// Saves a wrgf file containing the graph at the location specified
+        /// </summary>
+        /// <param name="path">Location to save the file at</param>
+        /// <param name="autosave">If this is set to true, the graph's saved property is not updated</param>
+        public void Save(string path, bool autosave=false)
         {
             // This will be used to detect whether the file is of the correct format
             string data = "GRAPH FILE\n";

@@ -43,6 +43,8 @@ namespace GraphManager
             OptionsForm optionsForm = new OptionsForm();
             optionsForm.Show();
             optionsForm.Close();
+
+            // Check what happened last time
             try
             {
                 string lastData = File.ReadAllText(Application.StartupPath + "\\AutosaveData.txt");
@@ -596,6 +598,11 @@ namespace GraphManager
             prevZoomLevel = zoomLevel;
         }
 
+        /// <summary>
+        /// Acronymises the input text
+        /// </summary>
+        /// <param name="input">Long text</param>
+        /// <returns></returns>
         private string ShortenText(string input)
         {
             string[] words = input.Split(' ','-');
@@ -648,6 +655,10 @@ namespace GraphManager
             
         }
 
+        /// <summary>
+        /// Parses and validates wrgf files then displays them
+        /// </summary>
+        /// <param name="path">Location of the file</param>
         private void LoadGraph(string path)
         {           
             Graph graph = new Graph();
