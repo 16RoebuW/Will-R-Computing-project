@@ -718,6 +718,19 @@ namespace GraphManager
         private void ProgramClosing(object sender, FormClosingEventArgs e)
         {
             File.WriteAllText(Application.StartupPath + "\\AutosaveData.txt", activeGraph.wasSaved.ToString());
+            if (activeGraph.nodes.Count > 0 && !activeGraph.wasSaved)
+            {
+                DialogResult userAnswer = MessageBox.Show("Current graph is not saved, would you like to save?", "Save graph?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (userAnswer == DialogResult.Yes)
+                {
+                    File.WriteAllText(Application.StartupPath + "\\AutosaveData.txt", "True");
+                    SaveClicked(new object(), new EventArgs());
+                }
+                else if (userAnswer == DialogResult.No)
+                {
+                    File.WriteAllText(Application.StartupPath + "\\AutosaveData.txt", "True");
+                }
+            }
         }
     }
 }
