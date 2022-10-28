@@ -14,7 +14,8 @@ namespace GraphManager
         public System.Drawing.Point location;
 
         public Node(Graph parentGraph, string name, System.Drawing.Point location)
-        {            
+        {
+            parentGraph.wasSaved = false;
             if (name == "")
             {
                 // Automatically assigns nodes with names A-Z, but if there are more than 26 they are named A1-Z1, then A2-Z2 and so on

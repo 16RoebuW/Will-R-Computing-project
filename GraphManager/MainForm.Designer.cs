@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.tstTop = new System.Windows.Forms.ToolStrip();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
@@ -49,6 +50,7 @@
             this.icoEdit = new System.Windows.Forms.PictureBox();
             this.icoDelete = new System.Windows.Forms.PictureBox();
             this.icoG = new System.Windows.Forms.PictureBox();
+            this.autosaveTimer = new System.Windows.Forms.Timer(this.components);
             this.tstTop.SuspendLayout();
             this.tstMiddle.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -83,6 +85,7 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(164, 34);
             this.btnSave.Text = "Save Graph";
+            this.btnSave.Click += new System.EventHandler(this.SaveClicked);
             // 
             // btnOptions
             // 
@@ -117,6 +120,7 @@
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(169, 39);
             this.btnLoad.Text = "Open Graph";
+            this.btnLoad.Click += new System.EventHandler(this.LoadClicked);
             // 
             // cbxAlgorithmSelect
             // 
@@ -136,13 +140,14 @@
             // btnAlgRun
             // 
             this.btnAlgRun.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnAlgRun.Enabled = false;
             this.btnAlgRun.Image = ((System.Drawing.Image)(resources.GetObject("btnAlgRun.Image")));
             this.btnAlgRun.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnAlgRun.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnAlgRun.Name = "btnAlgRun";
             this.btnAlgRun.Size = new System.Drawing.Size(39, 39);
             this.btnAlgRun.Text = "toolStripButton3";
-            this.btnAlgRun.Click += new System.EventHandler(this.btnAlgRun_Click);
+            this.btnAlgRun.ToolTipText = "Select an algorithm from the dropdown";
             // 
             // rdbCreate
             // 
@@ -283,6 +288,11 @@
             this.icoG.TabIndex = 13;
             this.icoG.TabStop = false;
             // 
+            // autosaveTimer
+            // 
+            this.autosaveTimer.Interval = 300000;
+            this.autosaveTimer.Tick += new System.EventHandler(this.TimeTick);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -304,6 +314,7 @@
             this.MinimumSize = new System.Drawing.Size(640, 432);
             this.Name = "mainForm";
             this.Text = "GraphVis";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProgramClosing);
             this.Load += new System.EventHandler(this.ProgramLoaded);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Main_KeyUp);
@@ -350,6 +361,7 @@
         private System.Windows.Forms.PictureBox icoEdit;
         private System.Windows.Forms.PictureBox icoDelete;
         private System.Windows.Forms.PictureBox icoG;
+        private System.Windows.Forms.Timer autosaveTimer;
     }
 }
 

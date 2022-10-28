@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 
 namespace GraphManager
 {
@@ -40,7 +42,17 @@ namespace GraphManager
             // While this code seems to do nothing, it actually has the effect of applying the saved options to the main form when the program starts
             OptionsForm optionsForm = new OptionsForm();
             optionsForm.Show();
-            optionsForm.Close();          
+            optionsForm.Close();
+            try
+            {
+                string lastData = File.ReadAllText(Application.StartupPath + "\\AutosaveData.txt");
+                if (lastData == "False")
+                {
+                    MessageBox.Show("The last graph loaded was not saved when the program closed. To recover lost work, the autosave can be found at: " + Application.StartupPath + "\\autosave.wrgf");
+                }
+            }
+            catch { }
+            autosaveTimer.Start();
         }
 
         private void OpenOptions(object sender, EventArgs e)
@@ -365,6 +377,7 @@ namespace GraphManager
             btn.BringToFront();
             activeNode = FindNodeWithName(activeGraph.nodes, btn.Name);
             activeNode.location = btn.Location;
+            activeGraph.wasSaved = false;
             this.Invalidate(); 
         }
 
@@ -395,6 +408,7 @@ namespace GraphManager
         /// <param name="newWeight">The weight that should be set or not</param>
         public void EditEdge(int mode, string newName, double newWeight)
         {
+            activeGraph.wasSaved = false;
             switch (mode)
             {
                 case 0:
@@ -451,56 +465,6 @@ namespace GraphManager
 
             DisplayGraph(activeGraph);
             activeNode = null;
-        }
-
-        private void btnAlgRun_Click(object sender, EventArgs e)
-        {
-            // !!Testing code!!
-            // Graph A
-            Graph graph = new Graph();
-            graph.nodes.Add(new Node(graph, "Cammeringham Hill", new Point(20, 100)));
-            graph.nodes.Add(new Node(graph, "Álta", new Point(300, 300)));
-            graph.nodes.Add(new Node(graph, "B", new Point(700, 500)));
-            graph.nodes.Add(new Node(graph, "Barton-upon-Humber", new Point(500, 700)));
-            graph.nodes[0].JoinTo(graph.nodes[1], "", 8, ref IDCount);
-            graph.nodes[0].JoinTo(graph.nodes[2], "", 3, ref IDCount);
-            graph.nodes[0].JoinTo(graph.nodes[3], "", 5, ref IDCount);
-            graph.nodes[1].JoinTo(graph.nodes[2], "", 1, ref IDCount);
-            graph.nodes[1].JoinTo(graph.nodes[3], "", 2, ref IDCount);
-            graph.nodes[2].JoinTo(graph.nodes[3], "", 9, ref IDCount);
-
-            // Graph B
-            Graph graph1 = new Graph();
-            graph1.nodes.Add(new Node(graph1, "Riga", new Point(100, 100)));
-            graph1.nodes.Add(new Node(graph1, "Dreilini", new Point(400, 200)));
-            graph1.nodes.Add(new Node(graph1, "Valdlauči", new Point(200, 500)));
-            graph1.nodes.Add(new Node(graph1, "Mārupe", new Point(20, 300)));
-            graph1.nodes.Add(new Node(graph1, "Kekava", new Point(250, 800)));
-            graph1.nodes.Add(new Node(graph1, "Saurieši", new Point(600, 300)));
-            graph1.nodes[0].JoinTo(graph1.nodes[1], "", 8, ref IDCount);
-            graph1.nodes[0].JoinTo(graph1.nodes[2], "", 3, ref IDCount);
-            graph1.nodes[0].JoinTo(graph1.nodes[3], "", 4, ref IDCount);
-            graph1.nodes[1].JoinTo(graph1.nodes[2], "", 1, ref IDCount);
-            graph1.nodes[1].JoinTo(graph1.nodes[5], "", 6, ref IDCount);
-            graph1.nodes[2].JoinTo(graph1.nodes[3], "", 2, ref IDCount);
-            graph1.nodes[2].JoinTo(graph1.nodes[4], "", 5, ref IDCount);
-
-            // Graph C
-            Graph graph2 = new Graph();
-            graph2.nodes.Add(new Node(graph2, "St Louis", new Point(500, 100)));
-            graph2.nodes.Add(new Node(graph2, "Dallas", new Point(20, 200)));
-            graph2.nodes.Add(new Node(graph2, "Memphis", new Point(700, 200)));
-            graph2.nodes.Add(new Node(graph2, "Austin", new Point(15, 400)));
-            graph2.nodes.Add(new Node(graph2, "Houston", new Point(550, 300)));
-            graph2.nodes.Add(new Node(graph2, "New Orleans", new Point(750, 500)));
-            graph2.nodes.Add(new Node(graph2, "San Antonio", new Point(300, 700)));
-            graph2.nodes[0].JoinTo(graph2.nodes[1], "", 4, ref IDCount);
-            graph2.nodes[1].JoinTo(graph2.nodes[3], "", 53, ref IDCount);
-            graph2.nodes[4].JoinTo(graph2.nodes[5], "", 34, ref IDCount);
-            graph2.nodes[5].JoinTo(graph2.nodes[6], "", 105, ref IDCount);
-          
-
-            DisplayGraph(graph2);
         }
 
         private void Main_KeyDown(object sender, KeyEventArgs e)
@@ -644,6 +608,105 @@ namespace GraphManager
                 }
             }
             return output;
+        }
+
+        private void SaveClicked(object sender, EventArgs e)
+        {            
+            SaveFileDialog fileDialogue = new SaveFileDialog();
+            fileDialogue.Filter = "WR Graph File|*.wrgf";
+            fileDialogue.Title = "Save a graph";
+            fileDialogue.AddExtension = true;
+            DialogResult dialogueResult = fileDialogue.ShowDialog();
+
+            if (dialogueResult == DialogResult.OK)
+            {
+                string path = fileDialogue.FileName;
+                activeGraph.Save(path, false);
+            }
+        }
+
+        private void LoadClicked(object sender, EventArgs e)
+        {
+            if (activeGraph.nodes.Count > 0 && !activeGraph.wasSaved)
+            {
+                DialogResult userAnswer = MessageBox.Show("Are you sure you want to overwrite the current graph?","Overwrite?",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (userAnswer == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            OpenFileDialog fileDialogue = new OpenFileDialog();
+            fileDialogue.Filter = "WR Graph File|*.wrgf";
+            fileDialogue.Title = "Load a graph";
+            DialogResult dialogueResult = fileDialogue.ShowDialog();
+
+            if (dialogueResult == DialogResult.OK)
+            {
+                string path = fileDialogue.FileName;
+                LoadGraph(path);
+            }
+            
+        }
+
+        private void LoadGraph(string path)
+        {           
+            Graph graph = new Graph();
+            string[] fileLines = File.ReadAllLines(path);
+            string wholeFile = File.ReadAllText(path);
+            if (fileLines[0] != "GRAPH FILE")
+            {
+                statusLabel.Text = "The file specified is not in the required format or is corrupted";
+                return;
+            }
+            else
+            {
+                graph.minWeight = Convert.ToDouble(fileLines[1]);
+                graph.nodeID = Convert.ToInt32(fileLines[2]);                
+
+                // Regex to capture nodes
+                string regex = @"{X=([0-9]+),Y=([0-9]+)}([^:]+)";               
+                foreach (Match m in Regex.Matches(wholeFile, regex, RegexOptions.Multiline))
+                {
+                    Point location = new Point(Convert.ToInt32(m.Groups[1].Value), Convert.ToInt32(m.Groups[2].Value));
+                    graph.nodes.Add(new Node(graph, m.Groups[3].Value, location));
+                }
+
+                // Now to find the arcs
+                List<int> createdArcs = new List<int>();
+                string[] colonSplit = wholeFile.Split(':');
+                for (int i = 1; i < colonSplit.Length; i++)
+                {
+                    string[] arcs = colonSplit[i].Split('\n');
+                    // The last item in this list will be a node or end of file, so we don't parse it here
+                    for (int j = 0; j < arcs.Length - 1; j++)
+                    {
+                        string[] data = arcs[j].Split(',');
+                        int tempId = Convert.ToInt32(data[0]);
+                        if (!createdArcs.Contains(tempId))
+                        {
+                            createdArcs.Add(tempId);
+                            Node destination = FindNodeWithName(graph.nodes, data[2]);
+                            graph.nodes[i - 1].JoinTo(destination, data[1], Convert.ToDouble(data[3]), ref tempId);
+                            IDCount = Math.Max(tempId, IDCount);                          
+                        }
+                    }
+                }
+
+                activeGraph = graph;
+                graph.wasSaved = true;
+                DisplayGraph(activeGraph);
+            }
+        }
+
+        private void TimeTick(object sender, EventArgs e)
+        {
+            // Called every 5 minutes
+            activeGraph.Save(Application.StartupPath + "\\autosave.wrgf", true);
+        }
+
+        private void ProgramClosing(object sender, FormClosingEventArgs e)
+        {
+            File.WriteAllText(Application.StartupPath + "\\AutosaveData.txt", activeGraph.wasSaved.ToString());
         }
     }
 }
