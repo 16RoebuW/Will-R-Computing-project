@@ -162,7 +162,7 @@ namespace GraphManager
         }
 
         /// <summary>
-        /// Returns a node from a list of nodes that has the name specified. Returns null and displays a message if not found
+        /// Returns a node from a list of nodes that has the name specified. Returns null if not found
         /// </summary>
         /// <param name="nodes">The list to be searched</param>
         /// <param name="name">The name the node should have</param>
@@ -176,7 +176,6 @@ namespace GraphManager
                     return node;
                 }
             }
-            MessageBox.Show("NODE NOT FOUND");
             return null;
         }
 
@@ -396,7 +395,14 @@ namespace GraphManager
                 {
                     foreach (Arc a in n.connections)
                     {
+                        if (a.highlighted)
+                        {
+                            blackPen.Color = Color.Red;
+                            blackPen.Width *= 1.25f;
+                        }
                         e.Graphics.DrawLine(blackPen, a.between[0].location, a.between[1].location);
+                        blackPen.Color = Color.Black;
+                        blackPen.Width = 3 * zoomLevel * zoomLevel;
                     }
                 }
             }
@@ -423,6 +429,7 @@ namespace GraphManager
                     else
                     {
                         activeEdge.SetWeight(newWeight);
+                        activeGraph.minWeight = Math.Min(activeGraph.minWeight, newWeight);
                     }
                     break;
                 case 1:
@@ -438,6 +445,7 @@ namespace GraphManager
                     else
                     {
                         activeEdge.SetWeight(newWeight);
+                        activeGraph.minWeight = Math.Min(activeGraph.minWeight, newWeight);
                     }
                     break;
                 case 3:
@@ -729,6 +737,131 @@ namespace GraphManager
                 else if (userAnswer == DialogResult.No)
                 {
                     File.WriteAllText(Application.StartupPath + "\\AutosaveData.txt", "True");
+                }
+            }
+        }
+
+        private void AlgorithmChosen(object sender, EventArgs e)
+        {
+            AlgorithmInputDialogue algorithmInput = new AlgorithmInputDialogue();
+            algorithmInput.selectedAlgorithm = cbxAlgorithmSelect.Text;
+            algorithmInput.ShowDialog(this);
+        }
+
+        /// <summary>
+        /// Called from AlgorithmInputDialogue, parses, validates and carries out algorithms then displays the output
+        /// </summary>
+        /// <param name="selectedAlgorithm">The algorithm's name in the combo box</param>
+        /// <param name="start">The name of the start node (Where applicable)</param>
+        /// <param name="end">The name of the destination node (Where applicable)</param>
+        public void RunAlgorithm(string selectedAlgorithm, string start, string end)
+        {
+            ClearHighlight(activeGraph);
+            Node from = null;
+            Node to = null;
+
+            switch (selectedAlgorithm)
+            {
+                case "Shortest path (Accurate)":
+                    from = FindNodeWithName(activeGraph.nodes, start);
+                    to = FindNodeWithName(activeGraph.nodes, end);
+                    if (from == null)
+                    {
+                        MessageBox.Show("Error, \"" + start + "\" does not exist on this graph");
+                    }
+                    else if (to == null)
+                    {
+                        MessageBox.Show("Error, \"" + end + "\" does not exist on this graph");
+                    }
+                    else
+                    {
+                        List<Node> route = activeGraph.Dijkstra(from, to);
+                        if (route != null)
+                        {
+                            double sum = 0;
+                            for (int i = 0; i < route.Count - 1; i++)
+                            {
+                                Arc arc = route[i].GetArcBetween(route[i + 1]);
+                                arc.highlighted = true;
+                                sum += arc.GetWeight();
+                            }
+                            DisplayGraph(activeGraph);
+                            statusLabel.Text = "Route found, total weight = " + sum;
+                        }
+                        else
+                        {
+                            statusLabel.Text = "Error: no possible route found";
+                        }
+                    }
+                    break;
+                case "Shortest path (Fast)":
+                    from = FindNodeWithName(activeGraph.nodes, start);
+                    to = FindNodeWithName(activeGraph.nodes, end);
+
+                    if (from == null)
+                    {
+                        MessageBox.Show("Error, \"" + start + "\" does not exist on this graph");
+                    }
+                    else if (to == null)
+                    {
+                        MessageBox.Show("Error, \"" + end + "\" does not exist on this graph");
+                    }
+                    else
+                    {
+                        List<Node> route = activeGraph.AStar(from, to);
+                        if (route != null)
+                        {
+                            double sum = 0;
+                            for (int i = 0; i < route.Count - 1; i++)
+                            {
+                                Arc arc = route[i].GetArcBetween(route[i + 1]);
+                                arc.highlighted = true;
+                                sum += arc.GetWeight();
+                            }
+                            DisplayGraph(activeGraph);
+                            statusLabel.Text = "Route found, total weight = " + sum;
+                        }
+                        else
+                        {
+                            statusLabel.Text = "Error: no possible route found";
+                        }
+                    }
+                    break;
+                case "Compute all min distances":
+                    double[,] minDistances = activeGraph.Floyds();
+                    LeastDistancesDisplay outputDisplay = new LeastDistancesDisplay();
+                    outputDisplay.distances = minDistances;
+                    outputDisplay.nodes = activeGraph.nodes;
+                    outputDisplay.Show();
+
+                    break;
+                case "Find shortest tour of all nodes":
+                    break;
+                case "Find minimum network containing all nodes (MST)":
+                    List<Arc> MST = activeGraph.Prims();
+                    if (MST != null)
+                    {
+                        foreach (Arc a in MST)
+                        {
+                            a.highlighted = true;
+                        }
+                        DisplayGraph(activeGraph);
+                    }
+                    else
+                    {
+                        statusLabel.Text = "Error: graph has unconnected nodes so there are no possible networks containing all nodes";
+                    }
+                    break;
+            }
+        }
+
+        public void ClearHighlight(Graph graph)
+        {
+            foreach (Node n in graph.nodes)
+            {
+                foreach (Arc a in n.connections)
+                {
+                    a.highlighted = false;
                 }
             }
         }

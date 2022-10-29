@@ -136,6 +136,7 @@
             this.cbxAlgorithmSelect.Margin = new System.Windows.Forms.Padding(250, 0, 1, 0);
             this.cbxAlgorithmSelect.Name = "cbxAlgorithmSelect";
             this.cbxAlgorithmSelect.Size = new System.Drawing.Size(300, 42);
+            this.cbxAlgorithmSelect.SelectedIndexChanged += new System.EventHandler(this.AlgorithmChosen);
             // 
             // btnAlgRun
             // 

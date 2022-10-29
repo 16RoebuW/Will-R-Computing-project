@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlgorithmInputDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlgorithmInputDialogue.Designer.cs">
+      <DependentUpon>AlgorithmInputDialogue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Arc.cs" />
     <Compile Include="EdgeEditDialogue.cs">
       <SubType>Form</SubType>
@@ -57,6 +63,12 @@
       <DependentUpon>EdgeEditDialogue.cs</DependentUpon>
     </Compile>
     <Compile Include="Graph.cs" />
+    <Compile Include="LeastDistancesDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LeastDistancesDisplay.Designer.cs">
+      <DependentUpon>LeastDistancesDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,8 +90,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AlgorithmInputDialogue.resx">
+      <DependentUpon>AlgorithmInputDialogue.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EdgeEditDialogue.resx">
       <DependentUpon>EdgeEditDialogue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LeastDistancesDisplay.resx">
+      <DependentUpon>LeastDistancesDisplay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

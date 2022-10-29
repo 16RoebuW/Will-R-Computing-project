@@ -72,5 +72,17 @@ namespace GraphManager
             connections.Add(connection);
             n.connections.Add(connection);
         }
+
+        public Arc GetArcBetween(Node other)
+        {
+            foreach (Arc a in connections)
+            {
+                if (a.between.Contains(other))
+                {
+                    return a;
+                }
+            }
+            return null;
+        }
     }
 }

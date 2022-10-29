@@ -13,6 +13,7 @@ namespace GraphManager
 
         public int ID;
         public Node[] between = new Node[2];
+        public bool highlighted = false;
 
         public Arc(string name, Node destination, double weight, ref int IDCount)
         {
