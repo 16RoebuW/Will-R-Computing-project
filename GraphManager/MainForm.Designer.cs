@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.tstTop = new System.Windows.Forms.ToolStrip();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
@@ -38,7 +39,7 @@
             this.btnAlgRun = new System.Windows.Forms.ToolStripButton();
             this.rdbCreate = new System.Windows.Forms.RadioButton();
             this.rdbEdit = new System.Windows.Forms.RadioButton();
-            this.rbdDelete = new System.Windows.Forms.RadioButton();
+            this.rdbDelete = new System.Windows.Forms.RadioButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.icoCreate = new System.Windows.Forms.PictureBox();
@@ -48,6 +49,8 @@
             this.icoZoomIn = new System.Windows.Forms.PictureBox();
             this.icoEdit = new System.Windows.Forms.PictureBox();
             this.icoDelete = new System.Windows.Forms.PictureBox();
+            this.icoG = new System.Windows.Forms.PictureBox();
+            this.autosaveTimer = new System.Windows.Forms.Timer(this.components);
             this.tstTop.SuspendLayout();
             this.tstMiddle.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -58,6 +61,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomIn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoEdit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoG)).BeginInit();
             this.SuspendLayout();
             // 
             // tstTop
@@ -81,6 +85,7 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(164, 34);
             this.btnSave.Text = "Save Graph";
+            this.btnSave.Click += new System.EventHandler(this.SaveClicked);
             // 
             // btnOptions
             // 
@@ -91,7 +96,7 @@
             this.btnOptions.Name = "btnOptions";
             this.btnOptions.Size = new System.Drawing.Size(122, 34);
             this.btnOptions.Text = "Options";
-            this.btnOptions.Click += new System.EventHandler(this.openOptions);
+            this.btnOptions.Click += new System.EventHandler(this.OpenOptions);
             // 
             // tstMiddle
             // 
@@ -103,7 +108,7 @@
             this.tstMiddle.Location = new System.Drawing.Point(0, 37);
             this.tstMiddle.Name = "tstMiddle";
             this.tstMiddle.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.tstMiddle.Size = new System.Drawing.Size(1584, 37);
+            this.tstMiddle.Size = new System.Drawing.Size(1584, 42);
             this.tstMiddle.TabIndex = 1;
             this.tstMiddle.Text = "toolStrip2";
             // 
@@ -113,8 +118,9 @@
             this.btnLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnLoad.Image")));
             this.btnLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(169, 34);
+            this.btnLoad.Size = new System.Drawing.Size(169, 39);
             this.btnLoad.Text = "Open Graph";
+            this.btnLoad.Click += new System.EventHandler(this.LoadClicked);
             // 
             // cbxAlgorithmSelect
             // 
@@ -129,16 +135,20 @@
             "Find minimum network containing all nodes (MST)"});
             this.cbxAlgorithmSelect.Margin = new System.Windows.Forms.Padding(250, 0, 1, 0);
             this.cbxAlgorithmSelect.Name = "cbxAlgorithmSelect";
-            this.cbxAlgorithmSelect.Size = new System.Drawing.Size(300, 37);
+            this.cbxAlgorithmSelect.Size = new System.Drawing.Size(300, 42);
+            this.cbxAlgorithmSelect.SelectedIndexChanged += new System.EventHandler(this.AlgorithmChosen);
             // 
             // btnAlgRun
             // 
             this.btnAlgRun.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnAlgRun.Enabled = false;
             this.btnAlgRun.Image = ((System.Drawing.Image)(resources.GetObject("btnAlgRun.Image")));
+            this.btnAlgRun.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnAlgRun.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnAlgRun.Name = "btnAlgRun";
-            this.btnAlgRun.Size = new System.Drawing.Size(23, 34);
+            this.btnAlgRun.Size = new System.Drawing.Size(39, 39);
             this.btnAlgRun.Text = "toolStripButton3";
+            this.btnAlgRun.ToolTipText = "Select an algorithm from the dropdown";
             // 
             // rdbCreate
             // 
@@ -165,16 +175,16 @@
             this.rdbEdit.Text = "Edit Mode";
             this.rdbEdit.UseVisualStyleBackColor = true;
             // 
-            // rbdDelete
+            // rdbDelete
             // 
-            this.rbdDelete.AutoSize = true;
-            this.rbdDelete.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
-            this.rbdDelete.Location = new System.Drawing.Point(232, 76);
-            this.rbdDelete.Name = "rbdDelete";
-            this.rbdDelete.Size = new System.Drawing.Size(174, 34);
-            this.rbdDelete.TabIndex = 4;
-            this.rbdDelete.Text = "Delete Mode";
-            this.rbdDelete.UseVisualStyleBackColor = true;
+            this.rdbDelete.AutoSize = true;
+            this.rdbDelete.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
+            this.rdbDelete.Location = new System.Drawing.Point(232, 76);
+            this.rdbDelete.Name = "rdbDelete";
+            this.rdbDelete.Size = new System.Drawing.Size(174, 34);
+            this.rdbDelete.TabIndex = 4;
+            this.rdbDelete.Text = "Delete Mode";
+            this.rdbDelete.UseVisualStyleBackColor = true;
             // 
             // statusStrip
             // 
@@ -227,10 +237,17 @@
             // 
             // trbZoom
             // 
+            this.trbZoom.LargeChange = 100;
             this.trbZoom.Location = new System.Drawing.Point(1431, 3);
+            this.trbZoom.Maximum = 200;
+            this.trbZoom.Minimum = 25;
             this.trbZoom.Name = "trbZoom";
             this.trbZoom.Size = new System.Drawing.Size(104, 45);
+            this.trbZoom.SmallChange = 25;
             this.trbZoom.TabIndex = 8;
+            this.trbZoom.TickFrequency = 25;
+            this.trbZoom.Value = 100;
+            this.trbZoom.Scroll += new System.EventHandler(this.ZoomLvlChanged);
             // 
             // icoZoomIn
             // 
@@ -262,6 +279,21 @@
             this.icoDelete.TabIndex = 12;
             this.icoDelete.TabStop = false;
             // 
+            // icoG
+            // 
+            this.icoG.Image = ((System.Drawing.Image)(resources.GetObject("icoG.Image")));
+            this.icoG.Location = new System.Drawing.Point(0, 732);
+            this.icoG.Name = "icoG";
+            this.icoG.Size = new System.Drawing.Size(70, 35);
+            this.icoG.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.icoG.TabIndex = 13;
+            this.icoG.TabStop = false;
+            // 
+            // autosaveTimer
+            // 
+            this.autosaveTimer.Interval = 300000;
+            this.autosaveTimer.Tick += new System.EventHandler(this.TimeTick);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -270,17 +302,24 @@
             this.Controls.Add(this.icoDelete);
             this.Controls.Add(this.icoEdit);
             this.Controls.Add(this.zoomPanel);
+            this.Controls.Add(this.icoG);
             this.Controls.Add(this.icoCreate);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.rbdDelete);
+            this.Controls.Add(this.rdbDelete);
             this.Controls.Add(this.rdbEdit);
             this.Controls.Add(this.rdbCreate);
             this.Controls.Add(this.tstMiddle);
             this.Controls.Add(this.tstTop);
+            this.KeyPreview = true;
             this.MaximumSize = new System.Drawing.Size(3840, 1888);
             this.MinimumSize = new System.Drawing.Size(640, 432);
             this.Name = "mainForm";
             this.Text = "GraphVis";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProgramClosing);
+            this.Load += new System.EventHandler(this.ProgramLoaded);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Main_KeyUp);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.BackClicked);
             this.tstTop.ResumeLayout(false);
             this.tstTop.PerformLayout();
             this.tstMiddle.ResumeLayout(false);
@@ -295,6 +334,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomIn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoEdit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoG)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -308,7 +348,7 @@
         private System.Windows.Forms.ToolStripButton btnLoad;
         private System.Windows.Forms.RadioButton rdbCreate;
         private System.Windows.Forms.RadioButton rdbEdit;
-        private System.Windows.Forms.RadioButton rbdDelete;
+        private System.Windows.Forms.RadioButton rdbDelete;
         private System.Windows.Forms.ToolStripButton btnOptions;
         private System.Windows.Forms.ToolStripComboBox cbxAlgorithmSelect;
         private System.Windows.Forms.ToolStripButton btnAlgRun;
@@ -321,6 +361,8 @@
         private System.Windows.Forms.PictureBox icoZoomIn;
         private System.Windows.Forms.PictureBox icoEdit;
         private System.Windows.Forms.PictureBox icoDelete;
+        private System.Windows.Forms.PictureBox icoG;
+        private System.Windows.Forms.Timer autosaveTimer;
     }
 }
 

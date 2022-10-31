@@ -47,7 +47,7 @@
             this.optionsBox.Name = "optionsBox";
             this.optionsBox.Size = new System.Drawing.Size(259, 228);
             this.optionsBox.TabIndex = 0;
-            this.optionsBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.itemChecked);
+            this.optionsBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ItemChecked);
             // 
             // btnClose
             // 
@@ -60,7 +60,7 @@
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.closeOptions);
+            this.btnClose.Click += new System.EventHandler(this.CloseOptions);
             // 
             // closePanel
             // 
@@ -102,7 +102,9 @@
             this.Controls.Add(this.optionsBox);
             this.MaximumSize = new System.Drawing.Size(328, 379);
             this.Name = "OptionsForm";
+            this.Tag = "";
             this.Text = "OptionsForm";
+            this.Load += new System.EventHandler(this.OptionsLoaded);
             this.closePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
