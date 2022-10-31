@@ -628,7 +628,7 @@ namespace GraphManager
         private void SaveClicked(object sender, EventArgs e)
         {            
             SaveFileDialog fileDialogue = new SaveFileDialog();
-            fileDialogue.Filter = "WR Graph File|*.wrgf";
+            fileDialogue.Filter = "WR Graph Format|*.wrgf";
             fileDialogue.Title = "Save a graph";
             fileDialogue.AddExtension = true;
             DialogResult dialogueResult = fileDialogue.ShowDialog();
@@ -651,7 +651,7 @@ namespace GraphManager
                 }
             }
             OpenFileDialog fileDialogue = new OpenFileDialog();
-            fileDialogue.Filter = "WR Graph File|*.wrgf";
+            fileDialogue.Filter = "WR Graph Format|*.wrgf";
             fileDialogue.Title = "Load a graph";
             DialogResult dialogueResult = fileDialogue.ShowDialog();
 
