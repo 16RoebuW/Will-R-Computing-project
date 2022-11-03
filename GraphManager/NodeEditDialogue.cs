@@ -21,12 +21,12 @@ namespace GraphManager
         {
             if (tbxName.Text == "")
             {
-                ((mainForm)Owner).activeEdge = null;
+                ((MainForm)Owner).activeEdge = null;
                 Close();
             }
             else
             {
-                ((mainForm)Owner).EditNode(tbxName.Text);
+                ((MainForm)Owner).EditNode(tbxName.Text);
                 Close();
             }
         }

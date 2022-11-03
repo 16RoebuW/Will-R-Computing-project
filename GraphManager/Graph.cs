@@ -332,37 +332,53 @@ namespace GraphManager
             return minWeight;
         }
 
+        
         public List<Node> TravellingSalesman(Node start)
         {
-	        List<Node> path = new List<Node>();
+            List<Node> minPath = null;
+            List<Node> path = new List<Node>();
+            List<int> nodeIDs = new List<int>();
+
+            int count = 0;
 	        foreach (Node n in nodes)
             {
 		        if (n != start)
                 {
 			        path.Add(n);
+                    nodeIDs.Add(count);
+                    count++;
 		        }
 	        }
 	        double shortest = double.PositiveInfinity;
-
             do
             {
-                double currentPathWeight = 0;
+                int numTested = 0;
+                double currentPathWeight = -1;
 
                 //Find current path weight
-                for (int i = 0; i < path.Count - 2; i++)
+                try
                 {
-                    currentPathWeight += path[i].GetArcBetween(path[i + 1]).GetWeight();
-                }
-                currentPathWeight += path[0].GetArcBetween(path[path.Count - 1]).GetWeight();
+                    for (int i = 0; i < path.Count - 1; i++)
+                    {
+                        currentPathWeight += path[i].GetArcBetween(path[i + 1]).GetWeight();
+                    }
+                    currentPathWeight += path[0].GetArcBetween(start).GetWeight();
+                    currentPathWeight += path[path.Count - 1].GetArcBetween(start).GetWeight();
 
-                // Update shortest length
-                List<Node> minPath = new List<Node>();
-                if (currentPathWeight < shortest)
-                {
-                    shortest = currentPathWeight;
-                    minPath = path;
+                    // Update shortest length
+                    if (currentPathWeight < shortest)
+                    {
+                        shortest = currentPathWeight;
+                        // .ToList sets the list by value rather than by reference
+                        minPath = path.ToList();
+                    }
                 }
-            } while (FindNextPath(path) != null);
+                catch
+                {
+
+                }
+                numTested++;
+            } while (FindNextPermutation(ref nodeIDs, ref path));
 
 	        if (shortest == double.PositiveInfinity)
             {
@@ -376,53 +392,61 @@ namespace GraphManager
                 
         }
 
-
-        // Find the next permutation of the array
-        private List<Node> FindNextPath(List<Node> data)
+        // Find the next permutation of the int array. Adapted from https://www.geeksforgeeks.org/traveling-salesman-problem-tsp-implementation/
+        public static bool FindNextPermutation(ref List<int> data, ref List<Node> nodes)
         {
-                // If the given dataset is empty or contains only one element next_permutation is not possible
-                if (data.Count <= 1)
-                {
-                    return null;
-	            }
+            // If the given dataset is empty or contains only one element next_permutation is not possible
+            if (data.Count <= 1)
+                return false;
+            int last = data.Count - 2;
 
-                int last = data.Count - 2;
+            // find the longest non-increasing suffix and find the pivot
+            while (last >= 0)
+            {
+                if (data[last] < data[last + 1])
+                    break;
+                last--;
+            }
 
-                // find the longest non-increasing suffix and find the pivot
-                while (last >= 0)
+            // If there is no increasing pair there is no higher order permutation
+            if (last < 0)
+                return false;
+            int nextGreater = data.Count - 1;
+
+            // Find the rightmost successor to the pivot
+            for (int i = data.Count - 1; i > last; i--)
+            {
+                if (data[i] > data[last])
                 {
-                    if (data[last] <  data[last + 1])
-                    {
-                        break;
-                    }
-                    last--;
+                    nextGreater = i;
+                    break;
                 }
-	
-                // If there is no increasing pair there is no higher order permutation
-                if (last < 0)
-                {
-                    return null;
-	            }
+            }
 
-                int nextGreater = data.Count - 1;
-                // Find the rightmost successor to the pivot
-                for (int i = data.Count - 1; i > last; i--) 
-                {
-                    if (data[i] >  data[last]) 
-                    {
-                        nextGreater = i;
-                        break;
-                    }
-                }
- 
-                // Swap the successor and the pivot
-                data = Swap(data, nextGreater, last);
- 
-                // Reverse the suffix
-                data = Reverse(data, last + 1, data.Count - 1);
- 
-                // Return true as the next permutation is done
-                return data;
+            // Swap the successor and the pivot
+            int temp = data[nextGreater];
+            Node tempN = nodes[nextGreater];
+            data[nextGreater] = data[last];
+            nodes[nextGreater] = nodes[last];
+            data[last] = temp;
+            nodes[last] = tempN;
+
+            // Reverse the suffix
+            int left = last + 1;
+            int right = data.Count - 1;
+            while (left < right)
+            {
+                temp = data[left];
+                tempN = nodes[left];
+                data[left] = data[right];
+                // ++ updates the variable AFTER it has been used
+                nodes[left++] = nodes[right];
+                data[right] = temp;
+                nodes[right--] = tempN;
+            }
+
+            // Return true as the next_permutation is done
+            return true;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace GraphManager
         {
             if (tbxName.Text == "" && tbxWeight.Text == "")
             {
-                ((mainForm)Owner).activeEdge = null;
+                ((MainForm)Owner).activeEdge = null;
                 Close();
             }
             else if(tbxName.Text == "")
@@ -30,7 +30,7 @@ namespace GraphManager
                 try
                 {
                     double weight = Convert.ToDouble(tbxWeight.Text);
-                    ((mainForm)Owner).EditEdge(2, "", weight);
+                    ((MainForm)Owner).EditEdge(2, "", weight);
                     Close();
                 }
                 catch
@@ -40,7 +40,7 @@ namespace GraphManager
             }
             else if(tbxWeight.Text == "")
             {
-                ((mainForm)Owner).EditEdge(1, tbxName.Text, -1);
+                ((MainForm)Owner).EditEdge(1, tbxName.Text, -1);
                 Close();
             }
             else
@@ -49,7 +49,7 @@ namespace GraphManager
                 try
                 {
                     double weight = Convert.ToDouble(tbxWeight.Text);
-                    ((mainForm)Owner).EditEdge(0, tbxName.Text, weight);
+                    ((MainForm)Owner).EditEdge(0, tbxName.Text, weight);
                     Close();
                 }
                 catch

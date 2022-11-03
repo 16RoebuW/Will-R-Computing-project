@@ -21,7 +21,7 @@ namespace GraphManager
 
         private void CloseDialogue(object sender, EventArgs e)
         {
-            ((mainForm)Owner).RunAlgorithm(selectedAlgorithm, tbxStart.Text, tbxEnd.Text);
+            ((MainForm)Owner).RunAlgorithm(selectedAlgorithm, tbxStart.Text, tbxEnd.Text);
             this.Close();
         }
 
@@ -37,7 +37,7 @@ namespace GraphManager
                     tbxEnd.Enabled = false;
                     break;
                 default:
-                    ((mainForm)Owner).RunAlgorithm(selectedAlgorithm, tbxStart.Text, tbxEnd.Text);
+                    ((MainForm)Owner).RunAlgorithm(selectedAlgorithm, tbxStart.Text, tbxEnd.Text);
                     this.Close();
                     break;
             }

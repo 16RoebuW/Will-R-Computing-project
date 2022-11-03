@@ -50,7 +50,7 @@ namespace GraphManager
                         // Checks if any open form is a mainForm, if so, change its fonts
                         try
                         {
-                            ((mainForm)f).ChangeFonts(font);
+                            ((MainForm)f).ChangeFonts(font);
                         }
                         catch 
                         { }
@@ -75,9 +75,9 @@ namespace GraphManager
                     foreach (Form f in Application.OpenForms)
                     {
                         f.BackColor = backColour;
-                        if (f is mainForm)
+                        if (f is MainForm)
                         {
-                            ((mainForm)f).themeIsDark = themeIsDark;
+                            ((MainForm)f).themeIsDark = themeIsDark;
                         }
                         foreach (Control c in f.Controls)
                         {

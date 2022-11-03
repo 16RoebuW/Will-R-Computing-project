@@ -1,6 +1,6 @@
 ﻿namespace GraphManager
 {
-    partial class mainForm
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tstTop = new System.Windows.Forms.ToolStrip();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
             this.btnOptions = new System.Windows.Forms.ToolStripButton();
@@ -294,7 +294,7 @@
             this.autosaveTimer.Interval = 300000;
             this.autosaveTimer.Tick += new System.EventHandler(this.TimeTick);
             // 
-            // mainForm
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -313,7 +313,7 @@
             this.KeyPreview = true;
             this.MaximumSize = new System.Drawing.Size(3840, 1888);
             this.MinimumSize = new System.Drawing.Size(640, 432);
-            this.Name = "mainForm";
+            this.Name = "MainForm";
             this.Text = "GraphVis";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProgramClosing);
             this.Load += new System.EventHandler(this.ProgramLoaded);

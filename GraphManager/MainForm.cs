@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 
 namespace GraphManager
 {
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
         public Graph activeGraph = new Graph();
         public Arc activeEdge;
@@ -29,7 +29,7 @@ namespace GraphManager
         public bool textIsLarge = false;
 
 
-        public mainForm()
+        public MainForm()
         {
             InitializeComponent();
             // Code to stop drawings flickering
@@ -759,6 +759,7 @@ namespace GraphManager
             ClearHighlight(activeGraph);
             Node from = null;
             Node to = null;
+            double sum = 0;
 
             switch (selectedAlgorithm)
             {
@@ -778,7 +779,6 @@ namespace GraphManager
                         List<Node> route = activeGraph.Dijkstra(from, to);
                         if (route != null)
                         {
-                            double sum = 0;
                             for (int i = 0; i < route.Count - 1; i++)
                             {
                                 Arc arc = route[i].GetArcBetween(route[i + 1]);
@@ -811,7 +811,6 @@ namespace GraphManager
                         List<Node> route = activeGraph.AStar(from, to);
                         if (route != null)
                         {
-                            double sum = 0;
                             for (int i = 0; i < route.Count - 1; i++)
                             {
                                 Arc arc = route[i].GetArcBetween(route[i + 1]);
@@ -836,6 +835,34 @@ namespace GraphManager
 
                     break;
                 case "Find shortest tour of all nodes":
+                    from = FindNodeWithName(activeGraph.nodes, start);
+                    if (from != null)
+                    {
+                        List<Node> cycle = activeGraph.TravellingSalesman(from);
+
+                        if (cycle.Count > 0)
+                        {
+                            // To create a closed loop
+                            cycle.Add(from);
+                            cycle.Add(cycle[0]);
+                            for (int i = 0; i < cycle.Count - 1; i++)
+                            {
+                                Arc arc = cycle[i].GetArcBetween(cycle[i + 1]);
+                                arc.highlighted = true;
+                                sum += arc.GetWeight();
+                            }
+                            DisplayGraph(activeGraph);
+                            statusLabel.Text = "Route found, total weight = " + sum;
+                        }
+                        else
+                        {
+                            statusLabel.Text = "No possible routes found";
+                        }
+                    }
+                    else
+                    {
+                        statusLabel.Text = "Error, \"" + start + "\" does not exist on this graph";
+                    }
                     break;
                 case "Find minimum network containing all nodes (MST)":
                     List<Arc> MST = activeGraph.Prims();
