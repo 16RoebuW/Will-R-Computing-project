@@ -41,7 +41,7 @@
             this.btnDone.Location = new System.Drawing.Point(420, 92);
             this.btnDone.Name = "btnDone";
             this.btnDone.Size = new System.Drawing.Size(117, 41);
-            this.btnDone.TabIndex = 13;
+            this.btnDone.TabIndex = 12;
             this.btnDone.Text = "Done";
             this.btnDone.UseVisualStyleBackColor = true;
             this.btnDone.Click += new System.EventHandler(this.CloseDialogue);
@@ -82,10 +82,11 @@
             this.tbxEnd.MaxLength = 30;
             this.tbxEnd.Name = "tbxEnd";
             this.tbxEnd.Size = new System.Drawing.Size(456, 37);
-            this.tbxEnd.TabIndex = 14;
+            this.tbxEnd.TabIndex = 11;
             // 
             // AlgorithmInputDialogue
             // 
+            this.AcceptButton = this.btnDone;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(549, 145);

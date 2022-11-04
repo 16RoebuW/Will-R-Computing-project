@@ -210,7 +210,7 @@ namespace GraphManager
             {
                 textIsLarge = true;
             }
-            else
+            else if (font.Size < cbxAlgorithmSelect.Font.Size)
             {
                 textIsLarge = false;
             }

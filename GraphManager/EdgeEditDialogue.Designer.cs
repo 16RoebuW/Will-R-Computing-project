@@ -39,11 +39,11 @@
             // tbxName
             // 
             this.tbxName.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
-            this.tbxName.Location = new System.Drawing.Point(105, 39);
+            this.tbxName.Location = new System.Drawing.Point(105, 82);
             this.tbxName.MaxLength = 30;
             this.tbxName.Name = "tbxName";
             this.tbxName.Size = new System.Drawing.Size(432, 37);
-            this.tbxName.TabIndex = 0;
+            this.tbxName.TabIndex = 1;
             // 
             // lblTitle
             // 
@@ -59,7 +59,7 @@
             // 
             this.lblName.AutoSize = true;
             this.lblName.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
-            this.lblName.Location = new System.Drawing.Point(12, 46);
+            this.lblName.Location = new System.Drawing.Point(12, 85);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(87, 30);
             this.lblName.TabIndex = 2;
@@ -69,7 +69,7 @@
             // 
             this.lblWeight.AutoSize = true;
             this.lblWeight.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
-            this.lblWeight.Location = new System.Drawing.Point(12, 76);
+            this.lblWeight.Location = new System.Drawing.Point(12, 49);
             this.lblWeight.Name = "lblWeight";
             this.lblWeight.Size = new System.Drawing.Size(98, 30);
             this.lblWeight.TabIndex = 3;
@@ -78,11 +78,11 @@
             // tbxWeight
             // 
             this.tbxWeight.Font = new System.Drawing.Font("Arial Black", 15.75F, System.Drawing.FontStyle.Bold);
-            this.tbxWeight.Location = new System.Drawing.Point(105, 76);
+            this.tbxWeight.Location = new System.Drawing.Point(105, 42);
             this.tbxWeight.MaxLength = 30;
             this.tbxWeight.Name = "tbxWeight";
             this.tbxWeight.Size = new System.Drawing.Size(117, 37);
-            this.tbxWeight.TabIndex = 4;
+            this.tbxWeight.TabIndex = 0;
             // 
             // btnDone
             // 
@@ -97,6 +97,7 @@
             // 
             // EdgeEditDialogue
             // 
+            this.AcceptButton = this.btnDone;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(553, 176);

@@ -27,7 +27,7 @@ namespace GraphManager
 
             for (int i = 0; i < distances.GetLength(0); i++)
             {
-                dataTable.Columns.Add(new DataColumn(nodes[i].name));
+                dataTable.Columns.Add(new DataColumn(nodes[i].name, typeof(double)));
             }
 
             for (int j = 0; j < distances.GetLength(0); j++)

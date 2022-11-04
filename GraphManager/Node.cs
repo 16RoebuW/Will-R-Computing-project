@@ -28,6 +28,15 @@ namespace GraphManager
                     this.name = ((char)(parentGraph.nodeID + 65)).ToString();
                 }
                 parentGraph.nodeID++;
+                int copies = 0;
+                string letter = this.name;
+                string copyName = this.name;
+                while (parentGraph.nodes.Contains(this))
+                {
+                    copies++;
+                    copyName = letter + " (" + copies + ")";
+                    this.name = copyName;
+                }
             }
             else
             {

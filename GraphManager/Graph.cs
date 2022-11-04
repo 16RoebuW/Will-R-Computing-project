@@ -185,10 +185,7 @@ namespace GraphManager
                     }
                     else
                     { 
-                        for (int j = 0; j < count; j++)
-                        {
-                            return Backtrack(previous, end);
-                        }
+                        return Backtrack(previous, end);
                     }
                 }
 
@@ -278,10 +275,7 @@ namespace GraphManager
                     }
                     else
                     {
-                        for (int j = 0; j < fScore.Count; j++)
-                        {
-                            return Backtrack(cameFrom.ToArray(), end);
-                        }
+                        return Backtrack(cameFrom.ToArray(), end);
                     }
                 }
 
@@ -338,46 +332,72 @@ namespace GraphManager
             List<Node> minPath = null;
             List<Node> path = new List<Node>();
             List<int> nodeIDs = new List<int>();
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 
             int count = 0;
-	        foreach (Node n in nodes)
+            foreach (Node n in nodes)
             {
-		        if (n != start)
+	            if (n != start)
                 {
-			        path.Add(n);
+		            path.Add(n);
                     nodeIDs.Add(count);
                     count++;
-		        }
-	        }
-	        double shortest = double.PositiveInfinity;
+	            }
+            }
+
+            double shortest = double.PositiveInfinity;
+            stopwatch.Start();
+            for (int i = 0; i <= 120; i++)
+            {
+                TestPermutation(ref path, ref minPath, ref shortest, start);
+                bool nextIsPossible = FindNextPermutation(ref nodeIDs, ref path);
+                if (!nextIsPossible)
+                {
+                    if (shortest == double.PositiveInfinity)
+                    {
+                        // This means that there is no possible route
+                        return new List<Node>();
+                    }
+                    else
+                    {
+                        return minPath;
+                    }
+                }
+            }
+            stopwatch.Stop();
+
+            double factorial = 1;
+            for (int i = 1; i < nodes.Count; i++ )
+            {
+                factorial *= i;
+            }
+
+            // Subtract 1 for the time that has already elapsed (1 is multiplied by already elapsed time)
+            
+            double timeMs = Convert.ToDouble((factorial / 120f) - 1) * Convert.ToDouble(stopwatch.ElapsedMilliseconds);
+
+            
+            System.Windows.Forms.DialogResult answer;
+            // This means we have an overflow so time must be > 29000 years in ms (922337203685477ms)
+            if (timeMs >= TimeSpan.MaxValue.TotalMilliseconds)
+            {
+                answer = System.Windows.Forms.MessageBox.Show("For this network, this algorithm will take more than 29 thousand years to complete, are you sure you want to continue?", "Time warning", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+            }
+            else
+            {
+                TimeSpan estTime = TimeSpan.FromMilliseconds(timeMs);
+
+                // Display remaining time and ask user whether to continue
+                answer = System.Windows.Forms.MessageBox.Show("On your machine, this algorithm may take just over " + estTime.Days + " days, " + estTime.Hours + " hours, " + estTime.Minutes + " minutes, and " + estTime.Seconds + " seconds to complete, are you sure you want to continue?", "Time warning", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning);
+            }
+            if (answer == System.Windows.Forms.DialogResult.No)
+            {
+                return new List<Node>();
+            }
+
             do
             {
-                int numTested = 0;
-                double currentPathWeight = -1;
-
-                //Find current path weight
-                try
-                {
-                    for (int i = 0; i < path.Count - 1; i++)
-                    {
-                        currentPathWeight += path[i].GetArcBetween(path[i + 1]).GetWeight();
-                    }
-                    currentPathWeight += path[0].GetArcBetween(start).GetWeight();
-                    currentPathWeight += path[path.Count - 1].GetArcBetween(start).GetWeight();
-
-                    // Update shortest length
-                    if (currentPathWeight < shortest)
-                    {
-                        shortest = currentPathWeight;
-                        // .ToList sets the list by value rather than by reference
-                        minPath = path.ToList();
-                    }
-                }
-                catch
-                {
-
-                }
-                numTested++;
+                TestPermutation(ref path, ref minPath, ref shortest, start);
             } while (FindNextPermutation(ref nodeIDs, ref path));
 
 	        if (shortest == double.PositiveInfinity)
@@ -393,7 +413,7 @@ namespace GraphManager
         }
 
         // Find the next permutation of the int array. Adapted from https://www.geeksforgeeks.org/traveling-salesman-problem-tsp-implementation/
-        public static bool FindNextPermutation(ref List<int> data, ref List<Node> nodes)
+        public bool FindNextPermutation(ref List<int> data, ref List<Node> nodes)
         {
             // If the given dataset is empty or contains only one element next_permutation is not possible
             if (data.Count <= 1)
@@ -448,5 +468,31 @@ namespace GraphManager
             // Return true as the next_permutation is done
             return true;
         }
+
+        private void TestPermutation(ref List<Node> path, ref List<Node> minPath, ref double shortest, Node start)
+        {
+            double currentPathWeight = -1;
+
+            //Find current path weight
+            try
+            {
+                for (int i = 0; i < path.Count - 1; i++)
+                {
+                    currentPathWeight += path[i].GetArcBetween(path[i + 1]).GetWeight();
+                }
+                currentPathWeight += path[0].GetArcBetween(start).GetWeight();
+                currentPathWeight += path[path.Count - 1].GetArcBetween(start).GetWeight();
+
+                // Update shortest length
+                if (currentPathWeight < shortest)
+                {
+                    shortest = currentPathWeight;
+                    // .ToList sets the list by value rather than by reference
+                    minPath = path.ToList();
+                }
+            }
+            catch { }
+        }
+
     }
 }
