@@ -121,8 +121,11 @@ namespace GraphManager
                     else
                     {
                         activeNode.JoinTo(destination, "", 0, ref IDCount);
-                        statusLabel.Text = "";
-                        DisplayGraph(activeGraph);
+                        Arc newArc = activeNode.connections.Last();
+                        AddArcButton(newArc);
+                        // Draw the line
+                        this.Invalidate();
+                        statusLabel.Text = "";                      
                     }
                     
                 }
@@ -152,8 +155,9 @@ namespace GraphManager
                     destination.connections.Remove(activeNode.connections[i]);
                 }
                 activeGraph.nodes.Remove(activeNode);
-                // Refresh display
-                DisplayGraph(activeGraph);
+                // Update the display
+                this.Controls.Remove(btnSender);
+                this.Invalidate();
             }
             else
             {
@@ -263,107 +267,145 @@ namespace GraphManager
             foreach (Node n in input.nodes)
             {
                 // Create button to represent node
-                Button btnNode = new Button
+                AddNodeButton(n);
+
+                // Draw arcs to each connected node 
+                foreach (Arc a in n.connections)
                 {
-                    Location = n.location,
-                    Name = n.name,
-                    Tag = "Graph Part",
+                    AddArcButton(a);
+                }
+            }           
+        }
+
+        private void AddNodeButton(Node n)
+        {
+            Color backColour = SystemColors.Control;
+            Color textColour = SystemColors.ControlText;
+            if (themeIsDark)
+            {
+                backColour = SystemColors.ControlDarkDark;
+                textColour = SystemColors.ControlLight;
+            }
+
+            Font font = new Font("Segoe UI", 9, FontStyle.Regular);
+            if (textIsLarge)
+            {
+                font = new Font("Arial", 16, FontStyle.Bold);
+            }
+
+            Button btnNode = new Button
+            {
+                Location = n.location,
+                Name = n.name,
+                Tag = "Graph Part",
+                BackColor = backColour,
+                ForeColor = textColour,
+                Font = font,
+                MaximumSize = new Size((int)(300f * zoomLevel), (int)(70f * zoomLevel)),
+                MinimumSize = new Size((int)(0f * zoomLevel), (int)(70f * zoomLevel)),
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink
+            };
+            if (zoomLevel <= 0.5)
+            {
+                btnNode.Text = ShortenText(btnNode.Name);
+            }
+            else
+            {
+                btnNode.Text = btnNode.Name;
+            }
+
+            btnNode.Click += new EventHandler(HandleNodeClick);
+            btnNode.LocationChanged += new EventHandler(HandleNodeDrag);
+            Controls.Add(btnNode);
+        }
+
+        private void AddArcButton(Arc a)
+        {
+            Color backColour = SystemColors.Control;
+            Color textColour = SystemColors.ControlText;
+            if (themeIsDark)
+            {
+                backColour = SystemColors.ControlDarkDark;
+                textColour = SystemColors.ControlLight;
+            }
+
+            Font font = new Font("Segoe UI", 9, FontStyle.Regular);
+            if (textIsLarge)
+            {
+                font = new Font("Arial", 16, FontStyle.Bold);
+            }
+
+            // Prevents two buttons per arc by checking if one already exists
+            // (ContainsKey checks for a control with the given name)
+            if (!Controls.ContainsKey(a.ID.ToString()))
+            {
+                Button btnArc = new Button
+                {
+                    // Centerpoint between nodes
+                    Location = new Point((a.between[0].location.X + a.between[1].location.X) / 2,
+                                            (a.between[0].location.Y + a.between[1].location.Y) / 2),
+                    Tag = "Edge Label",
                     BackColor = backColour,
                     ForeColor = textColour,
                     Font = font,
                     MaximumSize = new Size((int)(300f * zoomLevel), (int)(70f * zoomLevel)),
                     MinimumSize = new Size((int)(0f * zoomLevel), (int)(70f * zoomLevel)),
                     AutoSize = true,
-                    AutoSizeMode = AutoSizeMode.GrowAndShrink
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    Name = a.ID.ToString()
                 };
-                if (zoomLevel <= 0.5)
-                {
-                    btnNode.Text = ShortenText(btnNode.Name);
-                }
-                else
-                {
-                    btnNode.Text = btnNode.Name;
-                }
 
-                btnNode.Click += new EventHandler(HandleNodeClick);
-                btnNode.LocationChanged += new EventHandler(HandleNodeDrag);
-                Controls.Add(btnNode);
 
-                // Draw arcs to each connected node 
-                foreach (Arc a in n.connections)
+                // When this button is clicked, call the HandleEdgeClick procedure
+                btnArc.Click += new EventHandler(HandleEdgeClick);
+
+                if (zoomLevel > 0.5)
                 {
-                    // Prevents two buttons per arc by checking if one already exists
-                    // (ContainsKey checks for a control with the given name)
-                    if (!Controls.ContainsKey(a.ID.ToString()))
+                    if (a.GetWeight() == 0)
                     {
-                        Button btnArc = new Button
+                        if (a.GetName() == "")
                         {
-                            // Centerpoint between nodes
-                            Location = new Point((a.between[0].location.X + a.between[1].location.X) / 2,
-                                                    (a.between[0].location.Y + a.between[1].location.Y) / 2),
-                            Tag = "Edge Label",
-                            BackColor = backColour,
-                            ForeColor = textColour,
-                            Font = font,
-                            MaximumSize = new Size((int)(300f * zoomLevel), (int)(70f * zoomLevel)),
-                            MinimumSize = new Size((int)(0f * zoomLevel), (int)(70f * zoomLevel)),
-                            AutoSize = true,
-                            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                            Name = a.ID.ToString()
-                        };
-                        
-
-                        // When this button is clicked, call the HandleEdgeClick procedure
-                        btnArc.Click += new EventHandler(HandleEdgeClick);
-
-                        if (zoomLevel > 0.5)
-                        {
-                            if (a.GetWeight() == 0)
-                            {
-                                if (a.GetName() == "")
-                                {
-                                    btnArc.Text = "_";
-                                }
-                                else
-                                {
-                                    btnArc.Text = a.GetName();
-                                }
-                            }
-                            else if (a.GetName() == "")
-                            {
-                                btnArc.Text = "Weight = " + a.GetWeight();
-                            }
-                            else
-                            {
-                                btnArc.Text = a.GetName() + ", weight = " + a.GetWeight();
-                            }
+                            btnArc.Text = "_";
                         }
                         else
                         {
-                            if (a.GetWeight() == 0)
-                            {
-                                if (a.GetName() == "")
-                                {
-                                    btnArc.Text = "_";
-                                }
-                                else
-                                {
-                                    btnArc.Text = ShortenText(a.GetName());
-                                }
-                            }
-                            else if (a.GetName() == "")
-                            {
-                                btnArc.Text = "W: " + a.GetWeight();
-                            }
-                            else
-                            {
-                                btnArc.Text = ShortenText(a.GetName()) + ", W: " + a.GetWeight();
-                            }
+                            btnArc.Text = a.GetName();
                         }
-                        Controls.Add(btnArc);
+                    }
+                    else if (a.GetName() == "")
+                    {
+                        btnArc.Text = "Weight = " + a.GetWeight();
+                    }
+                    else
+                    {
+                        btnArc.Text = a.GetName() + ", weight = " + a.GetWeight();
                     }
                 }
-            }           
+                else
+                {
+                    if (a.GetWeight() == 0)
+                    {
+                        if (a.GetName() == "")
+                        {
+                            btnArc.Text = "_";
+                        }
+                        else
+                        {
+                            btnArc.Text = ShortenText(a.GetName());
+                        }
+                    }
+                    else if (a.GetName() == "")
+                    {
+                        btnArc.Text = "W: " + a.GetWeight();
+                    }
+                    else
+                    {
+                        btnArc.Text = ShortenText(a.GetName()) + ", W: " + a.GetWeight();
+                    }
+                }
+                Controls.Add(btnArc);
+            }
         }
 
         private void HandleNodeDrag(object sender, EventArgs e)
@@ -521,14 +563,15 @@ namespace GraphManager
         {
             if (rdbCreate.Checked)
             {
-                activeGraph.nodes.Add(new Node(activeGraph, "", e.Location));
-                DisplayGraph(activeGraph);
+                Node nodeToAdd = new Node(activeGraph, "", e.Location);
+                activeGraph.nodes.Add(nodeToAdd);
+                AddNodeButton(nodeToAdd);
             }
         }
 
         private void ZoomLvlChanged(object sender, EventArgs e)
         {
-            zoomLevel = (225-trbZoom.Value) / 100f;
+            zoomLevel = (45-trbZoom.Value) / 20f;
             foreach (Control c in this.Controls)
             {
                 if ((string)c.Tag == "Graph Part" || (string)c.Tag == "Edge Label")
@@ -567,12 +610,12 @@ namespace GraphManager
                             {
                                 c.Text = ShortenText(activeEdge.GetName()) + ", W: " + activeEdge.GetWeight();
                             }
-                            
+
                         }
                     }
                     else if (zoomLevel > 0.5 && prevZoomLevel <= 0.5)
                     {
-                        
+
                         if ((string)c.Tag == "Graph Part")
                         {
                             c.Text = c.Name;
@@ -668,7 +711,7 @@ namespace GraphManager
         /// </summary>
         /// <param name="path">Location of the file</param>
         private void LoadGraph(string path)
-        {           
+        {
             Graph graph = new Graph();
             string[] fileLines = File.ReadAllLines(path);
             string wholeFile = File.ReadAllText(path);
@@ -680,10 +723,10 @@ namespace GraphManager
             else
             {
                 graph.minWeight = Convert.ToDouble(fileLines[1]);
-                graph.nodeID = Convert.ToInt32(fileLines[2]);                
+                graph.nodeID = Convert.ToInt32(fileLines[2]);
 
                 // Regex to capture nodes
-                string regex = @"{X=([0-9]+),Y=([0-9]+)}([^:]+)";               
+                string regex = @"{X=([0-9]+),Y=([0-9]+)}([^:]+)";
                 foreach (Match m in Regex.Matches(wholeFile, regex, RegexOptions.Multiline))
                 {
                     Point location = new Point(Convert.ToInt32(m.Groups[1].Value), Convert.ToInt32(m.Groups[2].Value));
@@ -706,7 +749,7 @@ namespace GraphManager
                             createdArcs.Add(tempId);
                             Node destination = FindNodeWithName(graph.nodes, data[2]);
                             graph.nodes[i - 1].JoinTo(destination, data[1], Convert.ToDouble(data[3]), ref tempId);
-                            IDCount = Math.Max(tempId, IDCount);                          
+                            IDCount = Math.Max(tempId, IDCount);
                         }
                     }
                 }
@@ -716,6 +759,7 @@ namespace GraphManager
                 DisplayGraph(activeGraph);
             }
         }
+    
 
         private void TimeTick(object sender, EventArgs e)
         {
