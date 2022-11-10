@@ -1,0 +1,162 @@
+{
+  "$id": "1",
+  "wasSaved": true,
+  "nodeID": 0,
+  "minWeight": 0.0,
+  "nodes": [
+    {
+      "$id": "2",
+      "name": "Riga",
+      "connections": [
+        {
+          "$id": "3",
+          "ID": 6,
+          "between": [
+            {
+              "$ref": "2"
+            },
+            {
+              "$id": "4",
+              "name": "Dreilini",
+              "connections": [
+                {
+                  "$ref": "3"
+                },
+                {
+                  "$id": "5",
+                  "ID": 9,
+                  "between": [
+                    {
+                      "$ref": "4"
+                    },
+                    {
+                      "$id": "6",
+                      "name": "Valdlauči",
+                      "connections": [
+                        {
+                          "$id": "7",
+                          "ID": 7,
+                          "between": [
+                            {
+                              "$ref": "2"
+                            },
+                            {
+                              "$ref": "6"
+                            }
+                          ],
+                          "highlighted": false
+                        },
+                        {
+                          "$ref": "5"
+                        },
+                        {
+                          "$id": "8",
+                          "ID": 11,
+                          "between": [
+                            {
+                              "$ref": "6"
+                            },
+                            {
+                              "$id": "9",
+                              "name": "Mārupe",
+                              "connections": [
+                                {
+                                  "$id": "10",
+                                  "ID": 8,
+                                  "between": [
+                                    {
+                                      "$ref": "2"
+                                    },
+                                    {
+                                      "$ref": "9"
+                                    }
+                                  ],
+                                  "highlighted": false
+                                },
+                                {
+                                  "$ref": "8"
+                                }
+                              ],
+                              "location": "20, 300"
+                            }
+                          ],
+                          "highlighted": false
+                        },
+                        {
+                          "$id": "11",
+                          "ID": 12,
+                          "between": [
+                            {
+                              "$ref": "6"
+                            },
+                            {
+                              "$id": "12",
+                              "name": "Kekava",
+                              "connections": [
+                                {
+                                  "$ref": "11"
+                                }
+                              ],
+                              "location": "280, 675"
+                            }
+                          ],
+                          "highlighted": false
+                        }
+                      ],
+                      "location": "200, 500"
+                    }
+                  ],
+                  "highlighted": false
+                },
+                {
+                  "$id": "13",
+                  "ID": 10,
+                  "between": [
+                    {
+                      "$ref": "4"
+                    },
+                    {
+                      "$id": "14",
+                      "name": "Saurieši",
+                      "connections": [
+                        {
+                          "$ref": "13"
+                        }
+                      ],
+                      "location": "600, 300"
+                    }
+                  ],
+                  "highlighted": false
+                }
+              ],
+              "location": "400, 200"
+            }
+          ],
+          "highlighted": false
+        },
+        {
+          "$ref": "7"
+        },
+        {
+          "$ref": "10"
+        }
+      ],
+      "location": "100, 100"
+    },
+    {
+      "$ref": "4"
+    },
+    {
+      "$ref": "6"
+    },
+    {
+      "$ref": "9"
+    },
+    {
+      "$ref": "12"
+    },
+    {
+      "$ref": "14"
+    }
+  ]
+}

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace GraphManager
 {
@@ -671,7 +672,7 @@ namespace GraphManager
         private void SaveClicked(object sender, EventArgs e)
         {            
             SaveFileDialog fileDialogue = new SaveFileDialog();
-            fileDialogue.Filter = "WR Graph Format|*.wrgf";
+            fileDialogue.Filter = "Java Script Object Notation|*.JSON";
             fileDialogue.Title = "Save a graph";
             fileDialogue.AddExtension = true;
             DialogResult dialogueResult = fileDialogue.ShowDialog();
@@ -694,7 +695,7 @@ namespace GraphManager
                 }
             }
             OpenFileDialog fileDialogue = new OpenFileDialog();
-            fileDialogue.Filter = "WR Graph Format|*.wrgf";
+            fileDialogue.Filter = "WR Graph Format|*.JSON";
             fileDialogue.Title = "Load a graph";
             DialogResult dialogueResult = fileDialogue.ShowDialog();
 
@@ -712,6 +713,7 @@ namespace GraphManager
         /// <param name="path">Location of the file</param>
         private void LoadGraph(string path)
         {
+            /*
             Graph graph = new Graph();
             string[] fileLines = File.ReadAllLines(path);
             string wholeFile = File.ReadAllText(path);
@@ -756,8 +758,19 @@ namespace GraphManager
 
                 activeGraph = graph;
                 graph.wasSaved = true;
+                
                 DisplayGraph(activeGraph);
             }
+            return;
+            */
+
+
+            activeGraph = JsonConvert.DeserializeObject<Graph>(File.ReadAllText(path), new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            });
+            DisplayGraph(activeGraph);
         }
     
 
