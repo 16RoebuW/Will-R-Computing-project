@@ -85,7 +85,7 @@ namespace GraphManager
                 activeEdge = FindArcFromID(Convert.ToInt32(btnSender.Name));
 
                 activeEdge.between[0].connections.Remove(activeEdge);
-                activeEdge.between[0] = null;
+                activeEdge.between[0] = null;              
                 activeEdge.between[1].connections.Remove(activeEdge);
                 activeEdge.between[1] = null;
                 // Hopefully won't result in a memory leak
@@ -151,6 +151,8 @@ namespace GraphManager
                 {
                     // Gets the node at the other end of the arc from the deleted node
                     Node destination = activeNode.connections[i].GetDestination(activeNode);
+                    // Removes the button representing the arc
+                    Controls.RemoveByKey(activeNode.connections[i].ID.ToString());
                     // Removes the arc from the destination node's list
                     destination.connections.Remove(activeNode.connections[i]);
                 }
