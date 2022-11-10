@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,12 @@ namespace GraphManager
         public List<Arc> connections = new List<Arc>();
         public System.Drawing.Point location;
 
+        [JsonConstructor]
+        public Node(string name, System.Drawing.Point location)
+        {
+            this.name = name;
+            this.location = location;
+        }
         public Node(Graph parentGraph, string name, System.Drawing.Point location)
         {
             parentGraph.wasSaved = false;
@@ -77,7 +84,7 @@ namespace GraphManager
         public void JoinTo(Node n, string name, double weight, ref int IDCount)
         {
             Arc connection = new Arc(name, n, weight, ref IDCount);
-            connection.between[0] = this;
+            connection.between.Add(this);
             connections.Add(connection);
             n.connections.Add(connection);
         }
