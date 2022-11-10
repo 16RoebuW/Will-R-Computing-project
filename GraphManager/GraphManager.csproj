@@ -36,9 +36,6 @@
     <Reference Include="Control.Draggable, Version=1.0.5049.269, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Control.Draggable.1.0.5049.269\lib\net35-Client\Control.Draggable.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -66,7 +63,6 @@
       <DependentUpon>EdgeEditDialogue.cs</DependentUpon>
     </Compile>
     <Compile Include="Graph.cs" />
-    <Compile Include="GraphJsonConverter.cs" />
     <Compile Include="LeastDistancesDisplay.cs">
       <SubType>Form</SubType>
     </Compile>

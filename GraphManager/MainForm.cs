@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 
 namespace GraphManager
 {
@@ -672,7 +671,7 @@ namespace GraphManager
         private void SaveClicked(object sender, EventArgs e)
         {            
             SaveFileDialog fileDialogue = new SaveFileDialog();
-            fileDialogue.Filter = "Java Script Object Notation|*.JSON";
+            fileDialogue.Filter = "WR Graph File|*.wrgf";
             fileDialogue.Title = "Save a graph";
             fileDialogue.AddExtension = true;
             DialogResult dialogueResult = fileDialogue.ShowDialog();
@@ -695,7 +694,7 @@ namespace GraphManager
                 }
             }
             OpenFileDialog fileDialogue = new OpenFileDialog();
-            fileDialogue.Filter = "WR Graph Format|*.wrgf|Jason|*.JSON";
+            fileDialogue.Filter = "WR Graph Format|*.wrgf";
             fileDialogue.Title = "Load a graph";
             DialogResult dialogueResult = fileDialogue.ShowDialog();
 
@@ -713,65 +712,51 @@ namespace GraphManager
         /// <param name="path">Location of the file</param>
         private void LoadGraph(string path)
         {
-            if (path.Split('.')[1] == "wrgf")
+            Graph graph = new Graph();
+            string[] fileLines = File.ReadAllLines(path);
+            string wholeFile = File.ReadAllText(path);
+            if (fileLines[0] != "GRAPH FILE")
             {
-                Graph graph = new Graph();
-                string[] fileLines = File.ReadAllLines(path);
-                string wholeFile = File.ReadAllText(path);
-                if (fileLines[0] != "GRAPH FILE")
-                {
-                    statusLabel.Text = "The file specified is not in the required format or is corrupted";
-                    return;
-                }
-                else
-                {
-                    graph.minWeight = Convert.ToDouble(fileLines[1]);
-                    graph.nodeID = Convert.ToInt32(fileLines[2]);
-
-                    // Regex to capture nodes
-                    string regex = @"{X=([0-9]+),Y=([0-9]+)}([^:]+)";
-                    foreach (Match m in Regex.Matches(wholeFile, regex, RegexOptions.Multiline))
-                    {
-                        Point location = new Point(Convert.ToInt32(m.Groups[1].Value), Convert.ToInt32(m.Groups[2].Value));
-                        graph.nodes.Add(new Node(graph, m.Groups[3].Value, location));
-                    }
-
-                    // Now to find the arcs
-                    List<int> createdArcs = new List<int>();
-                    string[] colonSplit = wholeFile.Split(':');
-                    for (int i = 1; i < colonSplit.Length; i++)
-                    {
-                        string[] arcs = colonSplit[i].Split('\n');
-                        // The last item in this list will be a node or end of file, so we don't parse it here
-                        for (int j = 0; j < arcs.Length - 1; j++)
-                        {
-                            string[] data = arcs[j].Split(',');
-                            int tempId = Convert.ToInt32(data[0]);
-                            if (!createdArcs.Contains(tempId))
-                            {
-                                createdArcs.Add(tempId);
-                                Node destination = FindNodeWithName(graph.nodes, data[2]);
-                                graph.nodes[i - 1].JoinTo(destination, data[1], Convert.ToDouble(data[3]), ref tempId);
-                                IDCount = Math.Max(tempId, IDCount);
-                            }
-                        }
-                    }
-
-                    activeGraph = graph;
-                    graph.wasSaved = true;
-
-                    DisplayGraph(activeGraph);
-                }
+                statusLabel.Text = "The file specified is not in the required format or is corrupted";
                 return;
             }
             else
             {
+                graph.minWeight = Convert.ToDouble(fileLines[1]);
+                graph.nodeID = Convert.ToInt32(fileLines[2]);
 
-                activeGraph = JsonConvert.DeserializeObject<Graph>(File.ReadAllText(path), new JsonSerializerSettings()
+                // Regex to capture nodes
+                string regex = @"{X=([0-9]+),Y=([0-9]+)}([^:]+)";
+                foreach (Match m in Regex.Matches(wholeFile, regex, RegexOptions.Multiline))
                 {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                });
+                    Point location = new Point(Convert.ToInt32(m.Groups[1].Value), Convert.ToInt32(m.Groups[2].Value));
+                    graph.nodes.Add(new Node(graph, m.Groups[3].Value, location));
+                }
+
+                // Now to find the arcs
+                List<int> createdArcs = new List<int>();
+                string[] colonSplit = wholeFile.Split(':');
+                for (int i = 1; i < colonSplit.Length; i++)
+                {
+                    string[] arcs = colonSplit[i].Split('\n');
+                    // The last item in this list will be a node or end of file, so we don't parse it here
+                    for (int j = 0; j < arcs.Length - 1; j++)
+                    {
+                        string[] data = arcs[j].Split(',');
+                        int tempId = Convert.ToInt32(data[0]);
+                        if (!createdArcs.Contains(tempId))
+                        {
+                            createdArcs.Add(tempId);
+                            Node destination = FindNodeWithName(graph.nodes, data[2]);
+                            graph.nodes[i - 1].JoinTo(destination, data[1], Convert.ToDouble(data[3]), ref tempId);
+                            IDCount = Math.Max(tempId, IDCount);
+                        }
+                    }
+                }
+
+                activeGraph = graph;
+                graph.wasSaved = true;
+
                 DisplayGraph(activeGraph);
             }
         }

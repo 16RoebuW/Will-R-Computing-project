@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,12 +22,32 @@ namespace GraphManager
         /// <param name="autosave">If this is set to true, the graph's saved property is not updated</param>
         public void Save(string path, bool autosave=false)
         {
-            string data = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings()
+            // This will be used to detect whether the file is of the correct format
+            string data = "GRAPH FILE\n";
+
+            data += minWeight + "\n" + nodeID + "\n";
+            foreach (Node n in nodes)
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects
-        });
-            // Saves graph in the format:
+                data += n.location.ToString() + n.name + ":";
+                foreach (Arc a in n.connections)
+                {
+                    data += a.ID + "," + a.GetName() + "," + a.GetDestination(n).name + "," + a.GetWeight();
+                    data += "\n";
+                }
+            }
+            data += "END";
+            try
+            {
+                File.WriteAllText(path, data);
+                if (!autosave)
+                {
+                    wasSaved = true;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Windows.Forms.MessageBox.Show("Graph not saved, reason: " + e.Message);
+            }
 
             try
             {

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,24 +12,13 @@ namespace GraphManager
         private double weight;
 
         public int ID;
-        // The .JSON converter cannot handle arrays, so even though this will always have size 2, I have had to use a list
-        public List<Node> between;
+        public Node[] between = new Node[2];
         public bool highlighted = false;
-
-        [JsonConstructor]
-        public Arc(string name, List<Node> between, double weight, int ID)
-        {
-            this.name = name;
-            this.between = between;
-            this.weight = weight;
-            this.ID = ID;
-        }
 
         public Arc(string name, Node destination, double weight, ref int IDCount)
         {
-            between = new List<Node>();
             this.name = name;
-            between.Add(destination);
+            between[1] = destination;
             this.weight = weight;
             ID = IDCount;
             IDCount++;
