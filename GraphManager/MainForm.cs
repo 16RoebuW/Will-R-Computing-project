@@ -113,7 +113,16 @@ namespace GraphManager
                 if (statusLabel.Text.Contains("Select the node to connect to:"))
                 {
                     string[] parsedText = statusLabel.Text.Split(':');
-                    Node destination = FindNodeWithName(activeGraph.nodes, parsedText[1]);
+                    string nodeName = "";
+                    for (int i = 1; i < parsedText.Length; i++)
+                    {
+                        if (i != 1)
+                        {
+                            nodeName += ":";
+                        }
+                        nodeName += parsedText[i];
+                    }
+                    Node destination = FindNodeWithName(activeGraph.nodes, nodeName);
                     if (activeNode == destination)
                     {
                         statusLabel.Text = "Edge creation cancelled, you cannot join a node to itself";                        
