@@ -1,12 +1,12 @@
 GRAPH FILE
 0
 0
-{X=364,Y=110}St Louis:13,,Dallas,4
-{X=20,Y=200}Dallas:13,,St Louis,4
-14,,Austin,53
-{X=700,Y=200}Memphis:{X=15,Y=400}Austin:14,,Dallas,53
-{X=550,Y=300}Houston:15,,New Orleans,34
-{X=750,Y=500}New Orleans:15,,Houston,34
-16,,San Antonio,105
-{X=300,Y=700}San Antonio:16,,New Orleans,105
+{X=364,Y=110}St Louis[:-~-:]13[,-,][,-,]Dallas[,-,]4
+{X=20,Y=200}Dallas[:-~-:]13[,-,][,-,]St Louis[,-,]4
+14[,-,][,-,]Austin[,-,]53
+{X=700,Y=200}Memphis[:-~-:]{X=15,Y=400}Austin[:-~-:]14[,-,][,-,]Dallas[,-,]53
+{X=550,Y=300}Houston[:-~-:]15[,-,][,-,]New Orleans[,-,]34
+{X=750,Y=500}New Orleans[:-~-:]15[,-,][,-,]Houston[,-,]34
+16[,-,][,-,]San Antonio[,-,]105
+{X=300,Y=700}San Antonio[:-~-:]16[,-,][,-,]New Orleans[,-,]105
 END

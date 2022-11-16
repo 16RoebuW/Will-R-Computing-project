@@ -474,7 +474,8 @@ namespace GraphManager
             {
                 case 0:
                     // Change both
-                    activeEdge.SetName(newName);
+
+                    // Validation for weight
                     if (newWeight < 0)
                     {
                         MessageBox.Show("Weight must be positive, value not changed");
@@ -484,10 +485,27 @@ namespace GraphManager
                         activeEdge.SetWeight(newWeight);
                         activeGraph.minWeight = Math.Min(activeGraph.minWeight, newWeight);
                     }
+
+                    // Validation for name
+                    if (newName.Contains(@"[:-~-:]") || newName.Contains(@"[,-,]"))
+                    {
+                        MessageBox.Show("Please do not include the strings \"[:-~-:]\" or \"[,-,]\" in any names", "Invalid name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        break;
+                    }
+                    activeEdge.SetName(newName);
+
                     break;
                 case 1:
                     // Change name
+
+                    // Validation
+                    if (newName.Contains(@"[:-~-:]") || newName.Contains(@"[,-,]"))
+                    {
+                        MessageBox.Show("Please do not include the strings \"[:-~-:]\" or \"[,-,]\" in any names", "Invalid name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
                     activeEdge.SetName(newName);
+
                     break;
                 case 2:
                     // Change weight
@@ -515,6 +533,14 @@ namespace GraphManager
         /// <param name="newName">The name that should be set</param>
         public void EditNode(string newName)
         {
+            // Validation
+            if (newName.Contains(@"[:-~-:]") || newName.Contains(@"[,-,]"))
+            {
+                MessageBox.Show("Please do not include the strings \"[:-~-:]\" or \"[,-,]\" in any names", "Invalid name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
             // To ensure no identical names are created, we must destroy the existing node and replace it with one with the new name
             // This way, the validation inside the node constructor can be carried out
             // First, store all attributes of the node (except name)
@@ -523,8 +549,22 @@ namespace GraphManager
 
             activeGraph.nodes.Remove(activeNode);
 
-            activeGraph.nodes.Add(new Node(activeGraph, newName, oldLocation));
+            Node newNode = new Node(activeGraph, newName, oldLocation);
+            activeGraph.nodes.Add(newNode);
             activeGraph.nodes.Last().connections = oldConnections;
+            foreach (Arc a in newNode.connections)
+            {
+                int i = 0;
+                foreach (Node n in a.between)
+                {
+                    if (n.name == activeNode.name)
+                    {
+                        // Replace connections to old name with connections to new name
+                        a.between[i] = newNode;
+                    }
+                    i++;
+                }
+            }
 
             DisplayGraph(activeGraph);
             activeNode = null;
@@ -737,7 +777,7 @@ namespace GraphManager
                 graph.nodeID = Convert.ToInt32(fileLines[2]);
 
                 // Regex to capture nodes
-                string regex = @"{X=([0-9]+),Y=([0-9]+)}([^:]+)";
+                string regex = @"{X=([0-9]+),Y=([0-9]+)}(.+)\[:-~-:\]";
                 foreach (Match m in Regex.Matches(wholeFile, regex, RegexOptions.Multiline))
                 {
                     Point location = new Point(Convert.ToInt32(m.Groups[1].Value), Convert.ToInt32(m.Groups[2].Value));
@@ -746,14 +786,14 @@ namespace GraphManager
 
                 // Now to find the arcs
                 List<int> createdArcs = new List<int>();
-                string[] colonSplit = wholeFile.Split(':');
+                string[] colonSplit = wholeFile.Split(new string[] { @"[:-~-:]" }, StringSplitOptions.None);
                 for (int i = 1; i < colonSplit.Length; i++)
                 {
                     string[] arcs = colonSplit[i].Split('\n');
                     // The last item in this list will be a node or end of file, so we don't parse it here
                     for (int j = 0; j < arcs.Length - 1; j++)
                     {
-                        string[] data = arcs[j].Split(',');
+                        string[] data = arcs[j].Split(new string[] { @"[,-,]" }, StringSplitOptions.None);
                         int tempId = Convert.ToInt32(data[0]);
                         if (!createdArcs.Contains(tempId))
                         {

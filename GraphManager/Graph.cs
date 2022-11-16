@@ -28,10 +28,10 @@ namespace GraphManager
             data += minWeight + "\n" + nodeID + "\n";
             foreach (Node n in nodes)
             {
-                data += n.location.ToString() + n.name + ":";
+                data += n.location.ToString() + n.name + @"[:-~-:]";
                 foreach (Arc a in n.connections)
                 {
-                    data += a.ID + "," + a.GetName() + "," + a.GetDestination(n).name + "," + a.GetWeight();
+                    data += a.ID + @"[,-,]" + a.GetName() + @"[,-,]" + a.GetDestination(n).name + @"[,-,]" + a.GetWeight();
                     data += "\n";
                 }
             }
