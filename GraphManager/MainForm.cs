@@ -288,8 +288,13 @@ namespace GraphManager
             }           
         }
 
+        /// <summary>
+        /// Adds a button control to the form representing the input node. Checks fonts, colour and size automatically
+        /// </summary>
+        /// <param name="n">Node to represent</param>
         private void AddNodeButton(Node n)
         {
+            // Ensures the button's colour matches the program's theme
             Color backColour = SystemColors.Control;
             Color textColour = SystemColors.ControlText;
             if (themeIsDark)
@@ -298,12 +303,14 @@ namespace GraphManager
                 textColour = SystemColors.ControlLight;
             }
 
+            // Ensures the button's font matches the program's theme
             Font font = new Font("Segoe UI", 9, FontStyle.Regular);
             if (textIsLarge)
             {
                 font = new Font("Arial", 16, FontStyle.Bold);
             }
 
+            // Sets button attributes
             Button btnNode = new Button
             {
                 Location = n.location,
@@ -326,13 +333,19 @@ namespace GraphManager
                 btnNode.Text = btnNode.Name;
             }
 
+            // Makes the button respond to these events with the functions given, then adds it to the form
             btnNode.Click += new EventHandler(HandleNodeClick);
             btnNode.LocationChanged += new EventHandler(HandleNodeDrag);
             Controls.Add(btnNode);
         }
 
+        /// <summary>
+        /// Adds a button control to the form representing the input arc. Checks fonts, colour and size automatically
+        /// </summary>
+        /// <param name="a">Input arc</param>
         private void AddArcButton(Arc a)
         {
+            // Ensures the button's colour matches the program's theme
             Color backColour = SystemColors.Control;
             Color textColour = SystemColors.ControlText;
             if (themeIsDark)
@@ -341,6 +354,7 @@ namespace GraphManager
                 textColour = SystemColors.ControlLight;
             }
 
+            // Ensures the button's font matches the program's theme
             Font font = new Font("Segoe UI", 9, FontStyle.Regular);
             if (textIsLarge)
             {
@@ -371,6 +385,7 @@ namespace GraphManager
                 // When this button is clicked, call the HandleEdgeClick procedure
                 btnArc.Click += new EventHandler(HandleEdgeClick);
 
+                // Adjusts the way the name is displayed, depending on zoom level
                 if (zoomLevel > 0.5)
                 {
                     if (a.GetWeight() == 0)
@@ -811,7 +826,6 @@ namespace GraphManager
                 DisplayGraph(activeGraph);
             }
         }
-    
 
         private void TimeTick(object sender, EventArgs e)
         {
@@ -978,6 +992,10 @@ namespace GraphManager
             }
         }
 
+        /// <summary>
+        /// Removes all the highlights on the arcs of the graph
+        /// </summary>
+        /// <param name="graph">The graph with the highlights to be cleared</param>
         public void ClearHighlight(Graph graph)
         {
             foreach (Node n in graph.nodes)
