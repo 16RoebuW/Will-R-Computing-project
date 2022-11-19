@@ -114,6 +114,7 @@ namespace GraphManager
                 {
                     string[] parsedText = statusLabel.Text.Split(':');
                     string nodeName = "";
+                    // For loop to reconstruct the name after the first colon, because the name could include a colon and be cut off
                     for (int i = 1; i < parsedText.Length; i++)
                     {
                         if (i != 1)
@@ -386,49 +387,35 @@ namespace GraphManager
                 btnArc.Click += new EventHandler(HandleEdgeClick);
 
                 // Adjusts the way the name is displayed, depending on zoom level
-                if (zoomLevel > 0.5)
+                string displayName = "";
+                string displayWeight = "";
+                if (zoomLevel <= 0.5)
                 {
-                    if (a.GetWeight() == 0)
-                    {
-                        if (a.GetName() == "")
-                        {
-                            btnArc.Text = "_";
-                        }
-                        else
-                        {
-                            btnArc.Text = a.GetName();
-                        }
-                    }
-                    else if (a.GetName() == "")
-                    {
-                        btnArc.Text = "Weight = " + a.GetWeight();
-                    }
-                    else
-                    {
-                        btnArc.Text = a.GetName() + ", weight = " + a.GetWeight();
-                    }
+                    displayName = ShortenText(a.GetName());
+                    displayWeight = "W: " + a.GetWeight(); 
                 }
                 else
                 {
-                    if (a.GetWeight() == 0)
-                    {
-                        if (a.GetName() == "")
-                        {
-                            btnArc.Text = "_";
-                        }
-                        else
-                        {
-                            btnArc.Text = ShortenText(a.GetName());
-                        }
-                    }
-                    else if (a.GetName() == "")
-                    {
-                        btnArc.Text = "W: " + a.GetWeight();
-                    }
-                    else
-                    {
-                        btnArc.Text = ShortenText(a.GetName()) + ", W: " + a.GetWeight();
-                    }
+                    displayName = a.GetName();
+                    displayWeight = "Weight = " + a.GetWeight();
+                }
+
+                if (a.GetWeight() == 0)
+                {
+                    displayWeight = "";
+                }
+
+                if (displayName != "" && displayWeight != "")
+                {
+                    btnArc.Text = displayName + ", W" + displayWeight.Substring(1);
+                }
+                else if (displayName == "" && displayWeight == "")
+                {
+                    btnArc.Text = "_";
+                }
+                else
+                {
+                    btnArc.Text = displayName + displayWeight;
                 }
                 Controls.Add(btnArc);
             }
@@ -676,7 +663,7 @@ namespace GraphManager
                             {
                                 c.Text = ShortenText(activeEdge.GetName()) + ", W: " + activeEdge.GetWeight();
                             }
-
+                            
                         }
                     }
                     else if (zoomLevel > 0.5 && prevZoomLevel <= 0.5)
