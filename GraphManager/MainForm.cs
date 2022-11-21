@@ -128,6 +128,10 @@ namespace GraphManager
                     {
                         statusLabel.Text = "Edge creation cancelled, you cannot join a node to itself";                        
                     }
+                    else if (activeNode.GetArcBetween(destination) != null)
+                    {
+                        statusLabel.Text = "Edge creation cancelled, connection already exists";
+                    }
                     else
                     {
                         activeNode.JoinTo(destination, "", 0, ref IDCount);
