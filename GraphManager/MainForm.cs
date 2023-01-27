@@ -488,8 +488,26 @@ namespace GraphManager
                     }
                     else
                     {
-                        activeEdge.SetWeight(newWeight);
-                        activeGraph.minWeight = Math.Min(activeGraph.minWeight, newWeight);
+                        if (activeEdge.GetWeight() == activeGraph.minWeight)
+                        {
+                            // If this condition is true, the min weight may have changed so we must check each edge to find the new min weight
+
+                            activeEdge.SetWeight(newWeight);
+                            activeGraph.minWeight = newWeight;
+
+                            foreach (Node n in activeGraph.nodes)
+                            {
+                                foreach (Arc a in n.connections)
+                                {
+                                    activeGraph.minWeight = Math.Min(activeGraph.minWeight, a.GetWeight());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            activeEdge.SetWeight(newWeight);
+                            activeGraph.minWeight = Math.Min(activeGraph.minWeight, newWeight);
+                        }
                     }
 
                     // Validation for name
@@ -521,8 +539,26 @@ namespace GraphManager
                     }
                     else
                     {
-                        activeEdge.SetWeight(newWeight);
-                        activeGraph.minWeight = Math.Min(activeGraph.minWeight, newWeight);
+                        if (activeEdge.GetWeight() == activeGraph.minWeight)
+                        {
+                            // If this condition is true, the min weight may have changed so we must check each edge to find the new min weight
+
+                            activeEdge.SetWeight(newWeight);
+                            activeGraph.minWeight = newWeight;
+
+                            foreach (Node n in activeGraph.nodes)
+                            {
+                                foreach (Arc a in n.connections)
+                                {
+                                    activeGraph.minWeight = Math.Min(activeGraph.minWeight, a.GetWeight());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            activeEdge.SetWeight(newWeight);
+                            activeGraph.minWeight = Math.Min(activeGraph.minWeight, newWeight);
+                        }
                     }
                     break;
                 case 3:

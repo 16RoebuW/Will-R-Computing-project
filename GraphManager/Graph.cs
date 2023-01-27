@@ -12,7 +12,8 @@ namespace GraphManager
         public bool wasSaved;
 
         public int nodeID;
-        public double minWeight;
+        // Initialise to a very large number so that any new value is smaller than it
+        public double minWeight = double.MaxValue;
         public List<Node> nodes = new List<Node>();
 
         /// <summary>
@@ -336,7 +337,15 @@ namespace GraphManager
             // Good heuristic goes here.
 
             // Using min edge weight for now
-            return minWeight;
+            if (minWeight != double.MaxValue)
+            {
+                return minWeight;
+            }
+            else
+            {
+                // This will only occur if weights have been left unset, meaning they will have their default value of 0
+                return 0;
+            }
         }
 
         
