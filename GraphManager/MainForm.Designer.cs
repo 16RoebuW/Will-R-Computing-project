@@ -48,9 +48,9 @@
             this.trbZoom = new System.Windows.Forms.TrackBar();
             this.icoZoomIn = new System.Windows.Forms.PictureBox();
             this.icoEdit = new System.Windows.Forms.PictureBox();
-            this.icoDelete = new System.Windows.Forms.PictureBox();
             this.icoG = new System.Windows.Forms.PictureBox();
             this.autosaveTimer = new System.Windows.Forms.Timer(this.components);
+            this.icoDelete = new System.Windows.Forms.PictureBox();
             this.tstTop.SuspendLayout();
             this.tstMiddle.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -60,8 +60,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.trbZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomIn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoEdit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).BeginInit();
             this.SuspendLayout();
             // 
             // tstTop
@@ -269,16 +269,6 @@
             this.icoEdit.TabIndex = 11;
             this.icoEdit.TabStop = false;
             // 
-            // icoDelete
-            // 
-            this.icoDelete.Image = ((System.Drawing.Image)(resources.GetObject("icoDelete.Image")));
-            this.icoDelete.Location = new System.Drawing.Point(191, 75);
-            this.icoDelete.Name = "icoDelete";
-            this.icoDelete.Size = new System.Drawing.Size(35, 35);
-            this.icoDelete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.icoDelete.TabIndex = 12;
-            this.icoDelete.TabStop = false;
-            // 
             // icoG
             // 
             this.icoG.Image = ((System.Drawing.Image)(resources.GetObject("icoG.Image")));
@@ -293,6 +283,16 @@
             // 
             this.autosaveTimer.Interval = 300000;
             this.autosaveTimer.Tick += new System.EventHandler(this.TimeTick);
+            // 
+            // icoDelete
+            // 
+            this.icoDelete.Image = ((System.Drawing.Image)(resources.GetObject("icoDelete.Image")));
+            this.icoDelete.Location = new System.Drawing.Point(191, 75);
+            this.icoDelete.Name = "icoDelete";
+            this.icoDelete.Size = new System.Drawing.Size(35, 35);
+            this.icoDelete.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.icoDelete.TabIndex = 12;
+            this.icoDelete.TabStop = false;
             // 
             // MainForm
             // 
@@ -333,8 +333,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.trbZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoZoomIn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoEdit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.icoG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoDelete)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -360,9 +360,9 @@
         private System.Windows.Forms.TrackBar trbZoom;
         private System.Windows.Forms.PictureBox icoZoomIn;
         private System.Windows.Forms.PictureBox icoEdit;
-        private System.Windows.Forms.PictureBox icoDelete;
         private System.Windows.Forms.PictureBox icoG;
         private System.Windows.Forms.Timer autosaveTimer;
+        private System.Windows.Forms.PictureBox icoDelete;
     }
 }
 
