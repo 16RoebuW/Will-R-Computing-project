@@ -17,15 +17,18 @@ namespace GraphManager
             InitializeComponent();
         }
 
+        // Called when the form closes
         private void CloseDialogue(object sender, EventArgs e)
         {
             if (tbxName.Text == "" && tbxWeight.Text == "")
             {
+                // No changes
                 ((MainForm)Owner).activeEdge = null;
                 Close();
             }
             else if(tbxName.Text == "")
             {
+                // Weight change only
                 // Type check
                 try
                 {
@@ -40,11 +43,13 @@ namespace GraphManager
             }
             else if(tbxWeight.Text == "")
             {
+                // Name change only
                 ((MainForm)Owner).EditEdge(1, tbxName.Text, -1);
                 Close();
             }
             else
             {
+                // Name and weight change
                 // Type check
                 try
                 {

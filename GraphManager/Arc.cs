@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GraphManager
 {
+    // Arc class, representing connections between nodes. A reference is stored by each node
     public class Arc
     {
         private string name;
@@ -15,6 +16,13 @@ namespace GraphManager
         public Node[] between = new Node[2];
         public bool highlighted = false;
 
+        /// <summary>
+        /// Arc constructor, does not validate weight, should be used and then the arc should be added to the base node's list of connections
+        /// </summary>
+        /// <param name="name">Name of the arc (duplicates allowed)</param>
+        /// <param name="destination">The node on the other side of the arc, not the one that stores this arc in a list</param>
+        /// <param name="weight">Weight of the arc</param>
+        /// <param name="IDCount">Counter to be incremented</param>
         public Arc(string name, Node destination, double weight, ref int IDCount)
         {
             this.name = name;

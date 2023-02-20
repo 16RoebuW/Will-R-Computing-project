@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
-
+// TO DO: COMMENT ALL EVENT HANDLERS
 namespace GraphManager
 {
     public partial class MainForm : Form

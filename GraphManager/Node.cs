@@ -7,12 +7,19 @@ using System.Windows.Forms;
 
 namespace GraphManager
 {
+    // This class represents the individual datapoints on the graph, storing the connections between them
     public class Node
     {
         public string name;
         public List<Arc> connections = new List<Arc>();
         public System.Drawing.Point location;
 
+        /// <summary>
+        /// Node constructor, validates the name given as a parameter
+        /// </summary>
+        /// <param name="parentGraph">The graph that this node is a part of</param>
+        /// <param name="name">The name of the node (leave blank for automatic)</param>
+        /// <param name="location">The position of the node initially</param>
         public Node(Graph parentGraph, string name, System.Drawing.Point location)
         {
             parentGraph.wasSaved = false;
@@ -28,6 +35,8 @@ namespace GraphManager
                     this.name = ((char)(parentGraph.nodeID + 65)).ToString();
                 }
                 parentGraph.nodeID++;
+
+                // If this name already exists, add more text to its name indicating this
                 int copies = 0;
                 string letter = this.name;
                 string copyName = this.name;
@@ -40,6 +49,7 @@ namespace GraphManager
             }
             else
             {
+                // Ensures no duplicate names exist on the graph, incrementing them as 'name (1)', 'name (2)' etc
                 int copies = 0;
                 string copyName = name;
                 this.name = copyName;
@@ -82,6 +92,11 @@ namespace GraphManager
             n.connections.Add(connection);
         }
 
+        /// <summary>
+        /// Given an input node, find the arc connecting this node to the input (returns null on a failure)
+        /// </summary>
+        /// <param name="other">The node on the other side of this arc</param>
+        /// <returns></returns>
         public Arc GetArcBetween(Node other)
         {
             foreach (Arc a in connections)
