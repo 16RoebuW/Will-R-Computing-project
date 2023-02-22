@@ -19,12 +19,14 @@ namespace GraphManager
             InitializeComponent();
         }
 
+        // Called when the done button is clicked (either by the mouse or the enter key)
         private void CloseDialogue(object sender, EventArgs e)
         {
             ((MainForm)Owner).RunAlgorithm(selectedAlgorithm, tbxStart.Text, tbxEnd.Text);
             this.Close();
         }
 
+        // Called when the form is opened and displays the correct boxes or runs the algorithm depending on the dropdown box selection
         private void FormOpened(object sender, EventArgs e)
         {
             switch (selectedAlgorithm)

@@ -17,7 +17,7 @@ namespace GraphManager
             InitializeComponent();
         }
 
-        // Called when the form closes
+        // Called when the done button is pressed
         private void CloseDialogue(object sender, EventArgs e)
         {
             if (tbxName.Text == "" && tbxWeight.Text == "")

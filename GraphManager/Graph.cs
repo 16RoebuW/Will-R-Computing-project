@@ -25,8 +25,9 @@ namespace GraphManager
         {
             // This will be used to detect whether the file is of the correct format
             string data = "GRAPH FILE\n";
-
+            // Store the simple attributes
             data += minWeight + "\n" + nodeID + "\n";
+            // Store the nodes
             foreach (Node n in nodes)
             {
                 data += n.location.ToString() + n.name + @"[:-~-:]";
@@ -37,19 +38,7 @@ namespace GraphManager
                 }
             }
             data += "END";
-            try
-            {
-                File.WriteAllText(path, data);
-                if (!autosave)
-                {
-                    wasSaved = true;
-                }
-            }
-            catch (Exception e)
-            {
-                System.Windows.Forms.MessageBox.Show("Graph not saved, reason: " + e.Message);
-            }
-
+            // The data has been created, try to store it in a file
             try
             {
                 File.WriteAllText(path, data);
@@ -64,6 +53,10 @@ namespace GraphManager
             }
         }
 
+        /// <summary>
+        /// Standard implementation of Floyd'a algorithm on the graph. 
+        /// </summary>
+        /// <returns>The least distance matrix arranged in the order nodes are stored</returns>
         public double[,] Floyds()
         {
             double[,] leastDistances = new double[nodes.Count, nodes.Count];
@@ -109,6 +102,10 @@ namespace GraphManager
             return leastDistances;
         }
 
+        /// <summary>
+        /// Standard implementation of Prim's algorithm on the graph
+        /// </summary>
+        /// <returns>A list of the arcs included in the MST. Returns null if no MST exists</returns>
         public List<Arc> Prims()
         {
             List<Arc> MST = new List<Arc>();
@@ -148,6 +145,12 @@ namespace GraphManager
             return MST;
         }
 
+        /// <summary>
+        /// Standard implementation of Dijkstra's algorithm on the graph
+        /// </summary>
+        /// <param name="start">Node to begin the route from</param>
+        /// <param name="end">Destination node</param>
+        /// <returns>List of nodes in order from start to end where possible, null otherwise</returns>
         public List<Node> Dijkstra(Node start, Node end)
         {
             int count = nodes.Count;
@@ -188,7 +191,7 @@ namespace GraphManager
                     }
                 }
 
-                // This means we have some nodes which are unreachable from the start point, and we have explored all reachable nodes
+                // This means we have some nodes which are unreachable from the start point and we have explored all reachable nodes
                 if (smallestIndex == -1)
                 {
                     // First, check if the end is reachable
@@ -203,6 +206,7 @@ namespace GraphManager
                     }
                 }
 
+                // Explore the node with the next smallest distance
                 explored[smallestIndex] = true;
                 foreach (Arc a in nodes[smallestIndex].connections)
                 {
@@ -223,6 +227,7 @@ namespace GraphManager
             return Backtrack(previous, end);
         }
 
+        // Private function used inside Dijkstra and A* to backtrack through the previous nodes
         private List<Node> Backtrack(Node[] previous, Node end)
         {
             List<Node> route = new List<Node>();
@@ -240,6 +245,12 @@ namespace GraphManager
             return route;
         }
 
+        /// <summary>
+        /// Standard implementation of the A* algorithm on the graph
+        /// </summary>
+        /// <param name="start">Node to begin the route from</param>
+        /// <param name="end">Destination node</param>
+        /// <returns>List of nodes in order from start to end, returns null when no route is possible</returns>
         public List<Node> AStar(Node start, Node end)
         {
             // For any node in the open set, cameFrom at the same index is the node before it on the shortest path 
@@ -332,6 +343,7 @@ namespace GraphManager
             return null;
         }
 
+        // Placeholder heuristic function for A*
         public double Heuristic(Node current, Node goal)
         {
             // Good heuristic goes here.
@@ -348,7 +360,11 @@ namespace GraphManager
             }
         }
 
-        
+        /// <summary>
+        /// Brute force implementation of travelling saleseman - VERY SLOW
+        /// </summary>
+        /// <param name="start">Node to start and end at</param>
+        /// <returns>Hamiltonian cycle or empty list if none is possible</returns>
         public List<Node> TravellingSalesman(Node start)
         {
             List<Node> minPath = null;

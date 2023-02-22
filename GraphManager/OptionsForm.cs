@@ -22,6 +22,7 @@ namespace GraphManager
             InitializeComponent();
         }
 
+        // Called when the close button is pressed
         private void CloseOptions(object sender, EventArgs e)
         {
             this.Close();
@@ -29,7 +30,7 @@ namespace GraphManager
 
         private void ItemChecked(object sender, ItemCheckEventArgs e)
         {
-            //Called before the item is actually checked/unchecked
+            // Called before the item is actually checked/unchecked
             switch (optionsBox.SelectedIndex)
             {
                 case 0:
@@ -72,6 +73,7 @@ namespace GraphManager
                         themeIsDark = true;
                     }
 
+                    // Applies the colour theme
                     foreach (Form f in Application.OpenForms)
                     {
                         f.BackColor = backColour;
