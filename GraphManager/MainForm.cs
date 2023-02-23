@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlTypes;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using System.Text.RegularExpressions;
-// TO DO: COMMENT ALL EVENT HANDLERS
+
 namespace GraphManager
 {
     public partial class MainForm : Form
@@ -37,6 +29,7 @@ namespace GraphManager
             typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, this, new object[] { true });
         }
 
+        // Called just before the main form and controls are displayed
         private void ProgramLoaded(object sender, EventArgs e)
         {
             
@@ -58,12 +51,14 @@ namespace GraphManager
             autosaveTimer.Start();
         }
 
+        // Called when options button is used
         private void OpenOptions(object sender, EventArgs e)
         {
             OptionsForm optionsForm = new OptionsForm();
             optionsForm.Show();
         }
 
+        // Event handler assigned to all edge buttons
         private void HandleEdgeClick(object sender, EventArgs e)
         {
             statusLabel.Text = "";
@@ -102,6 +97,7 @@ namespace GraphManager
 
         }
 
+        // Event handler assigned to all node buttons 
         private void HandleNodeClick(object sender, EventArgs e)
         {
             Button btnSender = sender as Button;
@@ -426,6 +422,7 @@ namespace GraphManager
             }
         }
 
+        // Called when a node is dragged, keeps controls inside the bounds of the form
         private void HandleNodeDrag(object sender, EventArgs e)
         {           
             Button btn = sender as Button;
@@ -583,7 +580,6 @@ namespace GraphManager
                 return;
             }
 
-
             // To ensure no identical names are created, we must destroy the existing node and replace it with one with the new name
             // This way, the validation inside the node constructor can be carried out
             // First, store all attributes of the node (except name)
@@ -613,7 +609,8 @@ namespace GraphManager
             activeNode = null;
         }
 
-        private void Main_KeyDown(object sender, KeyEventArgs e)
+        // Called when a keyboard key is pressed down - used for 'G' key currently to facilitate dragging
+        private void MainKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.G)
             {
@@ -632,7 +629,8 @@ namespace GraphManager
             }
         }
 
-        private void Main_KeyUp(object sender, KeyEventArgs e)
+        // Called when a keyboard key is released
+        private void MainKeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.G)
             {
@@ -653,8 +651,10 @@ namespace GraphManager
             }
         }
 
+        // Called when the form itself is clicked - adds a node to the graph if in create mode
         private void BackClicked(object sender, MouseEventArgs e)
         {
+            // Add a node
             if (rdbCreate.Checked)
             {
                 Node nodeToAdd = new Node(activeGraph, "", e.Location);
@@ -663,6 +663,7 @@ namespace GraphManager
             }
         }
 
+        // Called when the zoom slider is moved
         private void ZoomLvlChanged(object sender, EventArgs e)
         {
             zoomLevel = (45-trbZoom.Value) / 20f;
@@ -676,6 +677,7 @@ namespace GraphManager
                     // Because for some reason this scales the controls about (0,0)
                     c.Location = oldLocation;
 
+                    // Text formatting to display a short version of the information if the zoom is below a certain level.
                     if (zoomLevel <= 0.5 && prevZoomLevel > 0.5)
                     {
                         if ((string)c.Tag == "Graph Part")
@@ -762,8 +764,10 @@ namespace GraphManager
             return output;
         }
 
+        // Called when the save button is used
         private void SaveClicked(object sender, EventArgs e)
-        {            
+        {     
+            // Use Windows's built in file browser
             SaveFileDialog fileDialogue = new SaveFileDialog();
             fileDialogue.Filter = "WR Graph File|*.wrgf";
             fileDialogue.Title = "Save a graph";
@@ -777,6 +781,7 @@ namespace GraphManager
             }
         }
 
+        // Called when the load button is used
         private void LoadClicked(object sender, EventArgs e)
         {
             if (activeGraph.nodes.Count > 0 && !activeGraph.wasSaved)
@@ -787,6 +792,7 @@ namespace GraphManager
                     return;
                 }
             }
+            // Use Windows's built in file browser
             OpenFileDialog fileDialogue = new OpenFileDialog();
             fileDialogue.Filter = "WR Graph Format|*.wrgf";
             fileDialogue.Title = "Load a graph";
@@ -855,12 +861,13 @@ namespace GraphManager
             }
         }
 
+        // Called when 300000ms (5 minutes) have elapsed on the autosaveTimer
         private void TimeTick(object sender, EventArgs e)
         {
-            // Called every 5 minutes
             activeGraph.Save(Application.StartupPath + "\\autosave.wrgf", true);
         }
 
+        // Called when the main form is closed in any way - used to warn about unsaved graphs
         private void ProgramClosing(object sender, FormClosingEventArgs e)
         {
             File.WriteAllText(Application.StartupPath + "\\AutosaveData.txt", activeGraph.wasSaved.ToString());
@@ -879,6 +886,7 @@ namespace GraphManager
             }
         }
 
+        // Called when an item from the dropdown box is chosen
         private void AlgorithmChosen(object sender, EventArgs e)
         {
             AlgorithmInputDialogue algorithmInput = new AlgorithmInputDialogue();
@@ -914,9 +922,11 @@ namespace GraphManager
                     }
                     else
                     {
+                        // The route may be possible
                         List<Node> route = activeGraph.Dijkstra(from, to);
                         if (route != null)
                         {
+                            // A route was found, display it by highlighting arcs
                             for (int i = 0; i < route.Count - 1; i++)
                             {
                                 Arc arc = route[i].GetArcBetween(route[i + 1]);
@@ -946,9 +956,11 @@ namespace GraphManager
                     }
                     else
                     {
+                        // The route may be possible
                         List<Node> route = activeGraph.AStar(from, to);
                         if (route != null)
                         {
+                            // A route was found, display it by highlighting arcs
                             for (int i = 0; i < route.Count - 1; i++)
                             {
                                 Arc arc = route[i].GetArcBetween(route[i + 1]);

@@ -103,7 +103,7 @@
             this.MaximumSize = new System.Drawing.Size(328, 379);
             this.Name = "OptionsForm";
             this.Tag = "";
-            this.Text = "OptionsForm";
+            this.Text = "Options";
             this.Load += new System.EventHandler(this.OptionsLoaded);
             this.closePanel.ResumeLayout(false);
             this.ResumeLayout(false);

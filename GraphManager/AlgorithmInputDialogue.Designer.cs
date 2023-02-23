@@ -96,7 +96,7 @@
             this.Controls.Add(this.lblStart);
             this.Controls.Add(this.tbxStart);
             this.Name = "AlgorithmInputDialogue";
-            this.Text = "AlgorithmInputDialogue";
+            this.Text = "Algorithm Input";
             this.Load += new System.EventHandler(this.FormOpened);
             this.ResumeLayout(false);
             this.PerformLayout();

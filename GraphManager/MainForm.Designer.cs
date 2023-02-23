@@ -317,8 +317,8 @@
             this.Text = "GraphVis";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProgramClosing);
             this.Load += new System.EventHandler(this.ProgramLoaded);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Main_KeyUp);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainKeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainKeyUp);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.BackClicked);
             this.tstTop.ResumeLayout(false);
             this.tstTop.PerformLayout();
