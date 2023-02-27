@@ -38,7 +38,7 @@ namespace GraphManager
                 }
             }
             data += "END";
-            // The data has been created, try to store it in a file
+            // The data has been created, try to store it in a file but validate that the file exists
             try
             {
                 File.WriteAllText(path, data);

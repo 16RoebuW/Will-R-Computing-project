@@ -47,7 +47,10 @@ namespace GraphManager
                     MessageBox.Show("The last graph loaded was not saved when the program closed. To recover lost work, the autosave can be found at: " + Application.StartupPath + "\\autosave.wrgf");
                 }
             }
-            catch { }
+            catch
+            {
+                // Nothing happens here because if the autosave does not exist yet, it will be created.
+            }
             autosaveTimer.Start();
         }
 
