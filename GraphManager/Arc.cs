@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GraphManager
+﻿namespace GraphManager
 {
     // Arc class, representing connections between nodes. A reference is stored by each node
     public class Arc
