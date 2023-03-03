@@ -818,6 +818,7 @@ namespace GraphManager
             Graph graph = new Graph();
             string[] fileLines = File.ReadAllLines(path);
             string wholeFile = File.ReadAllText(path);
+            // Check the right kind of file is being loaded
             if (fileLines[0] != "GRAPH FILE")
             {
                 statusLabel.Text = "The file specified is not in the required format or is corrupted";
@@ -982,6 +983,7 @@ namespace GraphManager
                 case "Compute all min distances":
                     double[,] minDistances = activeGraph.Floyds();
                     LeastDistancesDisplay outputDisplay = new LeastDistancesDisplay();
+                    // Send the data to this new form
                     outputDisplay.distances = minDistances;
                     outputDisplay.nodes = activeGraph.nodes;
                     outputDisplay.Show();
