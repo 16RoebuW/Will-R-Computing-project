@@ -264,6 +264,7 @@ namespace GraphManager
 
             List<bool> explored = new List<bool>();
 
+            // Initialise values
             foreach (Node n in nodes)
             {
                 cameFrom.Add(null);
@@ -307,6 +308,7 @@ namespace GraphManager
                 Node currentNode = nodes[currentPos];
                 if (currentNode == end)
                 {
+                    // If the end is reached, return the route
                     List<Node> path = new List<Node>();
                     while (currentNode != null)
                     {
@@ -322,6 +324,7 @@ namespace GraphManager
 
                     for (int i = 0; i < currentNode.connections.Count; i++)
                     {
+                        // Work out if this route is better
                         int neighbourPos = nodes.IndexOf(currentNode.connections[i].GetDestination(currentNode));
                         double temp_gScore = gScore[currentPos] + currentNode.connections[i].GetWeight();
                         if (temp_gScore < gScore[neighbourPos])
@@ -372,6 +375,7 @@ namespace GraphManager
             List<int> nodeIDs = new List<int>();
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 
+            // Create the initial path
             int count = 0;
             foreach (Node n in nodes)
             {

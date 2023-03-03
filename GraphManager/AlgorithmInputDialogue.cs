@@ -39,6 +39,7 @@ namespace GraphManager
                     tbxEnd.Enabled = false;
                     break;
                 default:
+                    // In the case that no inputs are required, run the algorithm straight away
                     ((MainForm)Owner).RunAlgorithm(selectedAlgorithm, tbxStart.Text, tbxEnd.Text);
                     this.Close();
                     break;

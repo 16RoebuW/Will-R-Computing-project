@@ -83,7 +83,7 @@ namespace GraphManager
         /// <returns></returns>
         public Node GetDestination(Node start)
         {
-            // Efficiency step
+            // Pick the one that isn't the input
             Node firstItem = between[0];
             if (firstItem == start)
             {
